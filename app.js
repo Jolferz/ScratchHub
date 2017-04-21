@@ -56,11 +56,12 @@ db.once('open', function() {console.log('We are connected to the database!')})
 // ==================================== //
 //             database test            //
 // ==================================== //
+
+// user1
 let user1 = new User({
     username: 'artiphex',
     email: 'jlora018@gmail.com',
-    password: 'pass123',
-    url: '/profile/artiphex'
+    password: 'pass123'
 })
 
 user1.save(function(err) {
@@ -68,6 +69,20 @@ user1.save(function(err) {
     // save user1 to the database
     console.log('user1 saved into the database.')
 })
+
+// user2
+let user2 = new User({
+    username: 'makiavelik',
+    email: 'julio_gonzalez@gmail.com',
+    password: 'tmmcolon'
+})
+
+user2.save(function(err) {
+    if (err) return err
+    // save user2 to the database
+    console.log('user2 saved into the database.')
+})
+
 
 // error handler
 app.use(function(err, req, res, next) {
