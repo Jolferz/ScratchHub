@@ -6,12 +6,16 @@ let express = require('express'),
     logger = require('morgan'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
-    mongoose = require('mongoose')
+    mongoose = require('mongoose'),
+    User = require('./models/user')
 
 let index = require('./routes/index'),
     users = require('./routes/users')
 
 let app = express()
+
+// gets rid of the db deprecation warning 'Mongoose: mpromise'
+mongoose.Promise = require('bluebird')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -48,6 +52,22 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 // confirm connection to the database
 db.once('open', function() {console.log('We are connected to the database!')})
+
+// ==================================== //
+//             database test            //
+// ==================================== //
+let user1 = new User({
+    username: 'artiphex',
+    email: 'jlora018@gmail.com',
+    password: 'pass123',
+    url: '/profile/artiphex'
+})
+
+user1.save(function(err) {
+    if (err) return err
+    // save user1 to the database
+    console.log('user1 saved into the database.')
+})
 
 // error handler
 app.use(function(err, req, res, next) {
