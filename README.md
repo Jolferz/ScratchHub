@@ -1,2 +1,2 @@
 # ScratchHub
-A website for CS50xMiami students to share and showcase their awesome Scratch project.
+A website for CS50xMiami students to share and showcase their awesome Scratch projects.
