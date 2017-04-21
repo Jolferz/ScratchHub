@@ -1,7 +1,7 @@
 'use strict'
 
 const mongoose = require('mongoose'),
-    user = require('user')
+    User = require('./user')
 
 let Schema = mongoose.Schema
 
@@ -10,13 +10,16 @@ let ProjectSchema = Schema({
     name: String,
     description: String,
     iframe: String,
-    owner: user._id,
-    url: {
-        type: String,
-        index: {
-            unique: true
-        }
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }
+})
+
+// ProjectSchema url field
+ProjectSchema.virtual('url').get(function() {
+    console.log('program entered url virtual\'s callback')
+    return  '/project/' + this.name
 })
 
 module.exports = mongoose.model('Project', ProjectSchema)

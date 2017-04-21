@@ -34,7 +34,8 @@ let UserSchema = Schema({
 
 // UserSchema url field
 UserSchema.virtual('url').get(function() {
-    return  '/user_profile/' + this.email
+    console.log('program entered url virtual\'s callback')
+    return  '/user_profile/' + this.username
 })
 
 module.exports = mongoose.model('User', UserSchema)

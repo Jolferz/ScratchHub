@@ -7,7 +7,8 @@ let express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
-    User = require('./models/user')
+    User = require('./models/user'),
+    Project = require('./models/project')
 
 let index = require('./routes/index'),
     users = require('./routes/users')
@@ -53,6 +54,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 // confirm connection to the database
 db.once('open', function() {console.log('We are connected to the database!')})
 
+
 // ==================================== //
 //             database test            //
 // ==================================== //
@@ -64,9 +66,9 @@ let user1 = new User({
     password: 'pass123'
 })
 
+// save user1 to the database
 user1.save(function(err) {
     if (err) return err
-    // save user1 to the database
     console.log('user1 saved into the database.')
 })
 
@@ -77,11 +79,33 @@ let user2 = new User({
     password: 'tmmcolon'
 })
 
+// save user2 to the database
 user2.save(function(err) {
     if (err) return err
-    // save user2 to the database
     console.log('user2 saved into the database.')
 })
+
+// project1
+let project1 = new Project({
+    name: 'Scratch & Dodge',
+    description: 'Play as Scratch while you avoid Dodge and friends. Use the arrow keys up and down to avoid being hit.',
+    iframe: '<iframe src="URL"></iframe>',
+    owner: user1._id
+})
+
+project1.save(function(err) {
+    if (err) return err
+    console.log('project1 saved into the database.')
+})
+
+Project.findOne({name: 'Scratch & Dodge'}).populate('owner').exec(function(err, project) {
+    if (err) return handleError(err)
+    console.log('The owner of this project is: %s', project.owner.username)
+})
+
+// ==================================== //
+//        end of database test          //
+// ==================================== //
 
 
 // error handler
