@@ -5,7 +5,8 @@ let express = require('express'),
     favicon = require('serve-favicon'),
     logger = require('morgan'),
     cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser')
+    bodyParser = require('body-parser'),
+    mongoose = require('mongoose')
 
 let index = require('./routes/index'),
     users = require('./routes/users')
@@ -35,6 +36,19 @@ app.use(function(req, res, next) {
     next(err)
 })
 
+// database connection
+let mongoDB = 'mongodb://127.0.0.1/my_database'
+mongoose.connect(mongoDB)
+
+// default connection
+let db = mongoose.connection
+
+// connection to error event
+db.on('error', console.error.bind(console, 'MongoDB connection error:'))
+
+// confirm connection to the database
+db.once('open', function() {console.log('We are connected to the database!')})
+
 // error handler
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development
@@ -45,5 +59,7 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500)
     res.render('error')
 })
+
+
 
 module.exports = app
