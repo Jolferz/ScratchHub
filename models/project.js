@@ -17,7 +17,7 @@ let ProjectSchema = Schema({
 })
 
 // ProjectSchema url field
-ProjectSchema.virtual('url').get(function() {
+ProjectSchema.virtual('url').get(() => {
     console.log('program entered url virtual\'s callback')
     return  '/project/' + this.name
 })

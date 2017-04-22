@@ -13,7 +13,7 @@ let mongoose = require('mongoose'),
 let testdb = express()
 
 
-// ========== Saving Users ============ //
+// ========== Creating Users ============ //
 
 // user1
 let user1 = new User({
@@ -42,7 +42,7 @@ user2.save(function(err) {
 })
 
 
-// ========== Saving Projects ============ //
+// ========== Creating Projects ============ //
 
 // project1
 let project1 = new Project({
@@ -82,9 +82,9 @@ Project.findOne({name: 'Scratch & Dodge'}).populate('owner').exec(function(err, 
     // console.log('The owner of this project is: %s', project.owner.username)
 })
 
-// ========== Saving Comments ============ //
+// ========== Creating Comments ============ //
 
-// need to revise this code
+// need to revise this code <-------------------------------------
 // comment1
 let comment1 = new _Comment({
     commenter: user1._id,
