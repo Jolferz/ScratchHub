@@ -8,15 +8,19 @@ let express = require('express'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     User = require('./models/user'),
-    Project = require('./models/project')
+    Project = require('./models/project'),
+    testdb = require('./testdb')
 
-let index = require('./routes/index'),
-    users = require('./routes/users')
+let index = require('./routers/index'),
+    users = require('./routers/users')
 
 let app = express()
 
 // gets rid of the db deprecation warning 'Mongoose: mpromise'
 mongoose.Promise = require('bluebird')
+
+// avoids warning of possible EventEmitter memory leak
+process.setMaxListeners(0)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -32,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // point specific URL requests to their route handlers
 app.use('/', index)
-app.use('/users', users)
+app.use('/profile', users)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -54,60 +58,6 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 // confirm connection to the database
 db.once('open', function() {console.log('We are connected to the database!')})
 
-
-// ==================================== //
-//             database test            //
-// ==================================== //
-
-// user1
-let user1 = new User({
-    username: 'artiphex',
-    email: 'jlora018@gmail.com',
-    password: 'pass123'
-})
-
-// save user1 to the database
-user1.save(function(err) {
-    if (err) return err
-    console.log('user1 saved into the database.')
-})
-
-// user2
-let user2 = new User({
-    username: 'makiavelik',
-    email: 'julio_gonzalez@gmail.com',
-    password: 'tmmcolon'
-})
-
-// save user2 to the database
-user2.save(function(err) {
-    if (err) return err
-    console.log('user2 saved into the database.')
-})
-
-// project1
-let project1 = new Project({
-    name: 'Scratch & Dodge',
-    description: 'Play as Scratch while you avoid Dodge and friends. Use the arrow keys up and down to avoid being hit.',
-    iframe: '<iframe src="URL"></iframe>',
-    owner: user1._id
-})
-
-project1.save(function(err) {
-    if (err) return err
-    console.log('project1 saved into the database.')
-})
-
-Project.findOne({name: 'Scratch & Dodge'}).populate('owner').exec(function(err, project) {
-    if (err) return handleError(err)
-    console.log('The owner of this project is: %s', project.owner.username)
-})
-
-// ==================================== //
-//        end of database test          //
-// ==================================== //
-
-
 // error handler
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development
@@ -119,6 +69,7 @@ app.use(function(err, req, res, next) {
     res.render('error')
 })
 
-
+// run database test
+testdb
 
 module.exports = app

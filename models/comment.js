@@ -1,16 +1,22 @@
 'use strict'
 
-const mongoose = require('mongoose'),
-    user = require('user'),
-    project = require('project')
+let mongoose = require('mongoose'),
+    User = require('./user'),
+    Project = require('./project')
 
 let Schema = mongoose.Schema
 
 // define comment Schema
 let CommentSchema = Schema({
-    commenter: user._id,
+    commenter: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     comment: String,
-    project: project._id
+    project: {
+        type: Schema.Types.ObjectId,
+        ref: 'Project'
+    }
 })
 
 module.exports = mongoose.model('Comment', CommentSchema)

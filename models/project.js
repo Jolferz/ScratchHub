@@ -1,6 +1,6 @@
 'use strict'
 
-const mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     User = require('./user')
 
 let Schema = mongoose.Schema
