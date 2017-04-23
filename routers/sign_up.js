@@ -1,15 +1,11 @@
 let express = require('express'),
 	router = express.Router()
 
-// GET home page
+// GET sign in page
 router.get('/', (req, res, next) => {
-	res.render('../views/index', {
+	res.render('../views/sign_up', {
 		 title: 'ScratchHub' 
 		})
-})
-
-router.get('/home', (req, res, next) => {
-	res.render('../views/index.ejs', { title: 'ScratchHub' })
 })
 
 module.exports = router

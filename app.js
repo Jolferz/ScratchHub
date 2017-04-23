@@ -9,14 +9,21 @@ let express = require('express'),
     mongoose = require('mongoose'),
     User = require('./models/user'),
     Project = require('./models/project')
-
-    // database tests
+    // uncomment this to run database's tests
     // , testdb = require('./testdb')
 
-let index = require('./routers/index'),
-    profile = require('./routers/profile')
-
 let app = express()
+
+// routers
+let index = require('./routers/index'),
+    profile = require('./routers/profile'),
+    sign_up = require('./routers/sign_up')
+
+// route handlers
+app.use('/', index)
+app.use('/home', index)
+app.use('/profile', profile)
+app.use('/sign_up', sign_up)
 
 // gets rid of the db deprecation warning 'Mongoose: mpromise'
 mongoose.Promise = require('bluebird')
@@ -36,18 +43,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use('/public', express.static(path.join(__dirname, '/public')))
 
-// ====================================== //
-//            index route handlers        //
-// ====================================== //
-// index
-app.use('/', index)
-
-
-// ====================================== //
-//          profile route handlers        //
-// ====================================== //
-// main
-app.use('/profile', profile)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
