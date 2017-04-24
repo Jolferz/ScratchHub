@@ -3,11 +3,11 @@
 let express = require('express'),
     router = express.Router()
 
-// require controller modules
-let project_controller = require('../controller/project')
+// GET project page
+router.get('/', (req, res, next) => {
+    res.render('../views/project', {
+        title: 'ScratchHub'
+    })
+});
 
-
-// ================================= //
-//          PROJECT ROUTES           //
-// ================================= //
-
+module.exports = router

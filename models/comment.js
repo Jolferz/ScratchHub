@@ -24,10 +24,9 @@ let CommentSchema = Schema({
     }
 })
 
+
 CommentSchema.virtual('post_date').get(function() {
-    return moment(this.date).format('MMMM Do, YYYY')
+    return moment(this.date).format('MMMM Do, YYYY - h:mm a')
 })
-
-
 
 module.exports = mongoose.model('Comment', CommentSchema)

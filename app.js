@@ -17,13 +17,18 @@ let app = express()
 // routers
 let index = require('./routers/index'),
     profile = require('./routers/profile'),
-    sign_up = require('./routers/sign_up')
+    registration = require('./routers/registration'),
+    project = require('./routers/project'),
+    latest = require('./routers/latest')
 
 // route handlers
 app.use('/', index)
 app.use('/home', index)
 app.use('/profile', profile)
-app.use('/sign_up', sign_up)
+app.use('/registration', registration)
+app.use('/project', project)
+app.use('/latest', latest)
+// app.use('/latest', latest)
 
 // gets rid of the db deprecation warning 'Mongoose: mpromise'
 mongoose.Promise = require('bluebird')

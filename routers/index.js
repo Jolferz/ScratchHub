@@ -1,15 +1,15 @@
+'use strict'
+
 let express = require('express'),
 	router = express.Router()
 
 // GET home page
 router.get('/', (req, res, next) => {
-	res.render('../views/index', {
-		 title: 'ScratchHub' 
-		})
+	res.render('../views/index', { title: 'ScratchHub' })
 })
 
-router.get('/home', (req, res, next) => {
-	res.render('../views/index.ejs', { title: 'ScratchHub' })
+router.get('/index', (req, res, next) => {
+	res.render('../views/index', { title: 'ScratchHub' })
 })
 
 module.exports = router

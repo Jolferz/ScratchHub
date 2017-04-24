@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,7 +10,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title><%= title %></title>
+    <title><%= title %> - Sign up</title>
 
     <!-- Bootstrap CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -21,7 +22,7 @@
     <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="jumbotron.css" rel="stylesheet">
+    <link href="../public/stylesheets/registration.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -36,42 +37,45 @@
 
   <body>
 
-    <!--  Navigation bar -->
-    <% include components/navbar %>
-
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <h1>Welcome to <%= title %></h1>
-        <p>Share your awesome Scratch projects with other CS50xMiami students and the world!</p>
-        <p><a class="btn btn-primary btn-lg" href="/registration" role="button">Register &raquo;</a></p>
-      </div>
-    </div>
-
     <div class="container">
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-4">
-          <h2>Share</h2>
-          <p>In ScratchHub you can showcase all your projects. Show off those mad skillz to other CS50xMiami students!</p>
-        </div>
-        <div class="col-md-4">
-          <h2>Comment</h2>
-          <p>Look at other's projects, and let them know how awesome their project is and any idea you have that could improve it.</p>
-       </div>
-        <div class="col-md-4">
-          <h2>Rate</h2>
-          <p>All projects in ScratchHub can be rated. Register and start giving those stars away!</p>
-        </div>
-      </div>
+	<div class="row centered-form">
+		<div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Please fill the form</h3>
+				</div>
+				<div class="panel-body">
+					<form role="form">
+						<div class="form-group">
+							<input type="username" name="username" id="username" class="form-control input-sm" placeholder="Username">	
+						</div>
+						<div class="form-group">
+							<input type="email" name="email" id="email" class="form-control input-sm" placeholder="Email Address">
+						</div>
 
-      <% include components/footer %>
-    </div> <!-- /container -->
-    
-    <!-- Scripts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
+						<div class="row">
+							<div class="col-xs-6 col-sm-6 col-md-6">
+								<div class="form-group">
+									<input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password">
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-6 col-md-6">
+								<div class="form-group">
+									<input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-sm" placeholder="Confirm Password">
+								</div>
+							</div>
+						</div>
+
+						<input type="submit" value="Register" class="btn btn-info btn-block">
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>

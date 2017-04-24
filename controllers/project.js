@@ -1,24 +1,24 @@
-'use strict'
+// 'use strict'
 
-let express = require('require'),
-    Projects = require('../models/project')
+// let express = require('require'),
+//     Projects = require('../models/project')
 
-let router = express.Router()
+// let router = express.Router()
 
-// ================================= //
-//          PROJECT ROUTES           //
-// ================================= //
+// // ================================= //
+// //          PROJECT ROUTES           //
+// // ================================= //
 
-// new project setup page
-
-
-//  Display the project page
+// // new project setup page
 
 
-//  Handle project delete
+// //  Display the project page
 
 
-//  Display updated page
+// //  Handle project delete
+
+
+// //  Display updated page
 
 
 

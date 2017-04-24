@@ -17,9 +17,8 @@ let ProjectSchema = Schema({
 })
 
 // ProjectSchema url field
-ProjectSchema.virtual('url').get(() => {
-    console.log('program entered url virtual\'s callback')
-    return  '/project/' + this.name
+ProjectSchema.virtual('url').get(function() {
+    return  ('/project/' + this.name).replace(/\s+/g, '-')
 })
 
 module.exports = mongoose.model('Project', ProjectSchema)

@@ -10,8 +10,10 @@ let mongoose = require('mongoose'),
     _Comment = require('./models/comment'),
     express = require('express')
 
-let testdb = express()
+// resolves deprecation warning 'Mongoose: mpromise'
+mongoose.Promise = require('bluebird')
 
+let testdb = express()
 
 // ========== Creating Users ============ //
 
@@ -65,8 +67,8 @@ Project.findOne({name: 'Scratch & Dodge'}).populate('owner').exec(function(err, 
 
 // project2
 let project2 = new Project({
-    name: 'Scratch & Dodge',
-    description: 'Play as Scratch while you avoid Dodge and friends. Use the arrow keys up and down to avoid being hit.',
+    name: 'My little Piggy',
+    description: 'Pigs & Moar!',
     iframe: '<iframe src="URL"></iframe>',
     owner: user1._id
 })
@@ -94,7 +96,11 @@ let comment1 = new _Comment({
 
 comment1.save(function(err) {
     if (err) return err
-    console.log('The comment has been published!')
+    console.log('user1 just left a comment!')
 })
+
+console.log(project1.url)
+console.log(project2.url)
+console.log(comment1.post_date)
 
 module.exports = testdb
