@@ -12,7 +12,8 @@ let ProjectSchema = Schema({
     iframe: String,
     owner: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        max: 1
     }
 })
 

@@ -2,10 +2,15 @@
 
 let express = require('express'),
     path = require('path'),
+    bcrypt = require('bcryptjs'),
     favicon = require('serve-favicon'),
     logger = require('morgan'),
+    passport = require('passport'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
+    session = require('express-session'),
+    expressValidator = require('express-validator'),
+    flash = require('connect-flash'),
     mongoose = require('mongoose'),
     User = require('./models/user'),
     Project = require('./models/project')
@@ -14,21 +19,20 @@ let express = require('express'),
 
 let app = express()
 
-// routers
-let index = require('./routers/index'),
-    profile = require('./routers/profile'),
-    registration = require('./routers/registration'),
-    project = require('./routers/project'),
-    latest = require('./routers/latest')
+// routes
+let index = require('./routes/index'),
+    profile = require('./routes/profile'),
+    access = require('./routes/access'),
+    project = require('./routes/project'),
+    latest = require('./routes/latest')
 
 // route handlers
 app.use('/', index)
 app.use('/home', index)
 app.use('/profile', profile)
-app.use('/registration', registration)
+app.use('/registration', access)
 app.use('/project', project)
 app.use('/latest', latest)
-// app.use('/latest', latest)
 
 // gets rid of the db deprecation warning 'Mongoose: mpromise'
 mongoose.Promise = require('bluebird')
@@ -48,6 +52,45 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use('/public', express.static(path.join(__dirname, '/public')))
 
+// express session
+app.use(session({
+    secret: 'secret',
+    saveUninitialized: true,
+    resave: true
+}))
+
+// password init
+app.use(passport.initialize())
+app.use(passport.session())
+
+// express validator
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value) {
+      var namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
+
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}))
+
+// connect flash
+app.use(flash())
+
+// global variables
+app.use(function (req, res, next) {
+    res.locals.success_msg = req.flash('success_msg')
+    res.locals.error_msg = req.flash('error_msg')
+    res.locals.error = req.flash('error')
+    next()
+})
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

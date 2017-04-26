@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose')
 
+
 let Schema = mongoose.Schema
 
 // define user Schema
@@ -34,8 +35,17 @@ let UserSchema = Schema({
 
 // UserSchema url field
 UserSchema.virtual('url').get(function() {
-    console.log('program entered url virtual\'s callback')
-    return  '/user_profile/' + this.username
+    return  '/profile/' + this.username
 })
 
-module.exports = mongoose.model('User', UserSchema)
+let User = module.exports = mongoose.model('User', UserSchema)
+
+module.exports.creatUser = function(newUser, callback) {
+    bcrypt.genSalt(10, function(err, salt) {
+        bcrypt.hash(newUser.password, salt, function(err, hash) {
+            newUser.password = hash
+            newUser.save(callback)
+        });
+    });
+}
+

@@ -1,25 +1,22 @@
-// 'use strict'
+'use strict'
 
-// let express = require('require'),
-//     Projects = require('../models/project')
+let Project = require('../models/project'),
+    User = require('../models/user'),
+    _Comment = require('../models/comment')
 
-// let router = express.Router()
+let async = require('async')
 
-// // ================================= //
-// //          PROJECT ROUTES           //
-// // ================================= //
+exports.user_project_page = (req, res) => {
 
-// // new project setup page
+    User.findOne({project: req.params.project})
+    .exec(function(err, project) {
+        if (err) throw err
+        res.render('../views/project', {
+            title: 'ScratchHub',
+            user: project.username,
+            project: project.project
+        })
+        // res.json(project)
+    })
 
-
-// //  Display the project page
-
-
-// //  Handle project delete
-
-
-// //  Display updated page
-
-
-
-
+}
