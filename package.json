@@ -1,5 +1,5 @@
 {
-  "name": "loginapp",
+  "name": "ScratchHub",
   "version": "1.0.0",
   "description": "Simple authentication system",
   "main": "app.js",
@@ -19,6 +19,7 @@
     "express-messages": "*",
     "express-session": "*",
     "express-validator": "*",
+    "moment": "^2.18.1",
     "mongodb": "*",
     "mongoose": "*",
     "passport": "*",

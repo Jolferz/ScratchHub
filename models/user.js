@@ -5,18 +5,37 @@ var bcrypt = require('bcryptjs');
 var UserSchema = mongoose.Schema({
 	username: {
 		type: String,
-		index:true
+        required: true,
+        max: 28,
+        index: {
+            unique: true
+        }
 	},
 	password: {
-		type: String
+		type: String,
+        required: true,
+        max: 40
 	},
 	email: {
-		type: String
+		type: String,
+        required: true,
+        max: 50,
+        index: {
+            unique: true
+        }
 	},
 	name: {
 		type: String
 	}
+}, {
+    toObject: {virtuals : true},
+    toJSON: {virtuals : true}
 });
+
+// user profile url
+UserSchema.virtual('url').get(function() {
+    return  '/profile/' + this.username
+})
 
 var User = module.exports = mongoose.model('User', UserSchema);
 
