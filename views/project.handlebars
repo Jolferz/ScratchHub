@@ -5,26 +5,22 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="col-md-10 col-lg-4 col-md-offset-1">
-                        <iframe allowtransparency="true" width="485" height="402" src="//scratch.mit.edu/projects/embed/138501556/?autostart=false" frameborder="0" allowfullscreen></iframe>
+                        {{{ iframe }}}
                     </div>
                     <div class="col-md-12  vertical-center ">
                         <ul class="list-group">
-                            <li class="list-group-item"><strong>Project name:</strong> Scratch & Dodge</li>
-                            <li class="list-group-item"><strong>Project type:</strong> Game</li>
-                            <li class="list-group-item"><strong>Author:</strong> jlora</li>
-                            <li class="list-group-item"></i><a href="https://scratch.mit.edu/projects/138501556/" target="_blank">Official site</a></li>
+                            <li class="list-group-item"><strong>Name:</strong> {{ name }}</li>
+                            <li class="list-group-item"><strong>Category:</strong> {{ category }}</li>
+                            <li class="list-group-item"><strong>Author:</strong> {{ author }}</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
         <div class="bs-callout bs-callout-danger project-description">
-            <h4>Project description</h4>
+            <h4>Description</h4>
             <p>
-                Play as Scratch while he is flying! Your job is to dodge all the other characters as long as you can. For score keeping you can look at your time score at the top of the screen. Have fun!
-            </p>
-            <p>
-                Odio recteque expetenda eum ea, cu atqui maiestatis cum. Te eum nibh laoreet, case nostrud nusquam an vis. Clita debitis apeirian et sit, integre iudicabit elaboraret duo ex. Nihil causae adipisci id eos.
+                {{ description }}
             </p>
         </div>               
     </div>

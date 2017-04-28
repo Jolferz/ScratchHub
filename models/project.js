@@ -11,11 +11,14 @@ let ProjectSchema = Schema({
     description: String,
     iframe: String,
     category: String,
-    owner: {
+    author: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         max: 1
     }
+}, {
+    toObject: {virtuals : true},
+    toJSON: {virtuals : true}
 })
 
 // ProjectSchema url field
