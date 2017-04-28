@@ -5,7 +5,9 @@ a platform where students not only will be able to upload their project, but als
 
 Technology stack:
 - Node.js
+- Espress.js
 - MongoDB
+- Moongoose
 - HTML
 - CSS
 - Javascript
