@@ -1,9 +1,23 @@
 
 let mongoose = require('mongoose'),
-    bcrypt = require('bcryptjs')
+    bcrypt = require('bcryptjs'),
+	Project = require('./project')
+
+
+let Schema = mongoose.Schema
+
 
 // User Schema
-let UserSchema = mongoose.Schema({
+let UserSchema = Schema({
+	name: String,
+	email: {
+		type: String,
+        required: true,
+        max: 50,
+        index: {
+            unique: true
+        }
+	},
 	username: {
 		type: String,
         required: true,
@@ -17,25 +31,19 @@ let UserSchema = mongoose.Schema({
         required: true,
         max: 40
 	},
-	email: {
-		type: String,
-        required: true,
-        max: 50,
-        index: {
-            unique: true
-        }
-	},
-	name: {
+	aboutMe: {
 		type: String
-	}
+	},
+	interests: {
+		type: String
+	},
+	projects: [{ 
+		type: Schema.Types.ObjectId,
+		ref: 'Project'
+	 }]
 }, {
     toObject: {virtuals : true},
     toJSON: {virtuals : true}
-})
-
-// user profile url
-UserSchema.virtual('url').get(function() {
-    return  '/profile/' + this.username
 })
 
 let User = module.exports = mongoose.model('User', UserSchema)

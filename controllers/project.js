@@ -4,8 +4,6 @@ let Project = require('../models/project'),
     User = require('../models/user'),
     _Comment = require('../models/comment')
 
-let async = require('async')
-
 exports.user_project_page = (req, res) => {
 
     User.findOne({project: req.params.project})
@@ -16,7 +14,6 @@ exports.user_project_page = (req, res) => {
             user: project.username,
             project: project.project
         })
-        // res.json(project)
     })
 
 }

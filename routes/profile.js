@@ -4,12 +4,21 @@ let express = require('express'),
 	router = express.Router(),
     User = require('../models/user')
 
-// hard coded profile
+
 router.get('/:user', function(req, res){
-	res.render('profile', {
-		username: req.params.user,
-		name: 'Stephanie Carpio',
-		email: 'StephCarpio@gmail.com'
+	
+	User.findOne({ username: req.params.user}, function(err, user) {
+		if (err) return res.status(500).send()
+		if (!user) return res.status(404).send()
+		
+		res.render('profile', {
+			username: user.username,
+			name: user.name,
+			email: user.email,
+			aboutMe: user.aboutMe,
+			interests: user.interests,
+			projects: user.projects
+		})
 	})
 })
 

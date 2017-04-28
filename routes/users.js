@@ -53,7 +53,7 @@ router.post('/register', function(req, res){
 		})
 
 		User.createUser(newUser, function(err, user){
-			if(err) throw err
+			if (err) throw err
 			console.log(user)
 		})
 

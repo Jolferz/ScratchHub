@@ -12,7 +12,7 @@ let express = require('express'),
     LocalStrategy = require('passport-local').Strategy,
     mongo = require('mongodb'),
     mongoose = require('mongoose')
-// uncomment this to run database's tests
+    // uncomment this to run database's tests
     // , testdb = require('./testdb')
 
 mongoose.connect('mongodb://localhost/ScratchHub')
@@ -20,9 +20,9 @@ let db = mongoose.connection
 
 // route handlers
 let routes = require('./routes/index'),
-	  users = require('./routes/users'),
-	  latest = require('./routes/latest'),
-	  project = require('./routes/project'),
+    users = require('./routes/users'),
+    latest = require('./routes/latest'),
+    project = require('./routes/project'),
     profile = require('./routes/profile'),
     logout = require('./routes/logout')
 
@@ -45,9 +45,12 @@ app.use(cookieParser())
 // Set Static Folder
 app.use(express.static(path.join(__dirname, 'public')))
 
-// Express Session
+// express session (don't include the secret in the repository) <===============================
+// express session (don't include the secret in the repository) <===============================
+// express session (don't include the secret in the repository) <===============================
+// express session (don't include the secret in the repository) <===============================
 app.use(session({
-    secret: 'secret',
+    secret: 'secretish',
     saveUninitialized: true,
     resave: true
 }))
@@ -59,9 +62,9 @@ app.use(passport.session())
 // Express Validator
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
-      let namespace = param.split('.')
-      , root    = namespace.shift()
-      , formParam = root
+      let namespace = param.split('.'), 
+      root = namespace.shift(),
+      formParam = root
 
     while(namespace.length) {
       formParam += '[' + namespace.shift() + ']'

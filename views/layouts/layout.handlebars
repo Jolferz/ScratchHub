@@ -2,8 +2,12 @@
 <html>
 <head>
 	<title>ScratchHub</title>
+
+  {{!-- CSS styles --}}
 	<link rel="stylesheet" href="/css/bootstrap.css" />
 	<link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/forms.css" />
+
 </head>
 <body>
 	<div class="container">
@@ -11,7 +15,8 @@
         <nav>
           <ul class="nav nav-pills pull-right">
             {{#if user}}
-              <li role="presentation"><a href="/profile/:user">Profile</a></li>
+              <li role="presentation"><a href="/project/new-project">New Project</a></li>
+              <li role="presentation"><a href="/profile/{{ user.username }}">Profile</a></li>
               <li role="presentation"><a href="/logout">Logout</a></li>
             {{else}}
               <li role="presentation"><a href="/index/login">Login</a></li>
@@ -19,7 +24,13 @@
             {{/if}}
           </ul>
         </nav>
-        <h3 class="text-muted">ScratchHub</h3>
+          <h3 class="text-muted">
+            {{#if user}}
+              <a href="/latest">ScratchHub</a>
+            {{else}}
+              ScratchHub
+            {{/if}}
+          </h3>
       </div>
 
 

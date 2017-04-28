@@ -14,8 +14,6 @@
                            <ul class="list-group">
                               <li class="list-group-item"><strong>Username: </strong>{{ username }}</li>
                               <li class="list-group-item"><strong>Real name: </strong>{{ name }}</li>
-                              <li class="list-group-item"><strong>Position: </strong>Software Engineer</li>
-                              <li class="list-group-item"><strong>Workplace: </strong>Google Inc. (Wishful thinking)</li>
                               <li class="list-group-item"></i><strong>Email: </strong>{{ email }}</li>
                            </ul>
                         </div>
@@ -25,39 +23,28 @@
                <div class="bs-callout bs-callout-danger">
                   <h4>About Me</h4>
                   <p>
-                     Lorem ipsum dolor sit amet, ea vel prima adhuc, scripta liberavisse ea quo, te vel vidit mollis complectitur. Quis verear mel ne. Munere vituperata vis cu, 
-                     te pri duis timeam scaevola, nam postea diceret ne. Cum ex quod aliquip mediocritatem, mei habemus persecuti mediocritatem ei.
-                  </p>
-                  <p>
-                     Odio recteque expetenda eum ea, cu atqui maiestatis cum. Te eum nibh laoreet, case nostrud nusquam an vis. 
-                     Clita debitis apeirian et sit, integre iudicabit elaboraret duo ex. Nihil causae adipisci id eos.
+					  {{ aboutMe }}
                   </p>
                </div>
                <div class="bs-callout bs-callout-danger">
                   <h4>Interests</h4>
                   <p>
-                     Software Engineering, Machine Learning, Image Processing,
-                     Computer Vision, Artificial Neural Networks, Data Science,
-                     Evolutionary Algorithms.
+					  {{ interests }}
                   </p>
                </div>
-               <div class="bs-callout bs-callout-danger">
-                  <h4>Projects</h4>
-                  <ul class="list-group">
-                     <a class="list-group-item inactive-link" href="/project/Scratch-&-Dodge">
-                        <h4 class="list-group-item-heading">Scratch & Dodge</h4>
-                        <p class="list-group-item-text">
-                           Play as Scratch while he is flying! Your job is to dodge all the other characters as long as you can. For score keeping you can look at your time score at the top of the screen. Give it a try!
-                        </p>
-                     </a>
-                     <a class="list-group-item inactive-link" href="#">
-                        <h4 class="list-group-item-heading">My Little Piggy</h4>
-                        <p class="list-group-item-text"> 
-                           Quis verear mel ne. Munere vituperata vis cu, te pri duis timeam scaevola, nam postea diceret ne. Cum ex quod aliquip mediocritatem, mei habemus persecuti mediocritatem ei. Pigs & Moar!<br>
-                        </p>
-                     </a>
-                  </ul>
-               </div>
+				<div class="bs-callout bs-callout-danger">
+					<h4>Projects</h4>
+						<ul class="list-group">
+						{{#each projects}}
+							<a class="list-group-item inactive-link" href="/project/{{ this.name }}">
+								<h4 class="list-group-item-heading">{{ this.name }}</h4>
+								<p class="list-group-item-text">
+									{{ this.description }}
+								</p>
+							</a>
+						{{/each}}			
+					</ul>
+				</div>
                
             </div>
          </div>
