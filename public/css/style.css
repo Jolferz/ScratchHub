@@ -298,7 +298,13 @@ iframe {
 }
 
 .project-description,
-.bs-callout {
+.bs-callout,
+.bs-callout-danger {
   margin: 20px;
+  text-decoration: none;
+}
+
+ul li a {
+  text-decoration: none;
 }
 

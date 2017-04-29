@@ -6,12 +6,13 @@ let express = require('express'),
     Project = require('../models/project')
 
 // project form
-router.get('/new-project', function(req, res){
+router.get('/new-project', function(req, res) {
 	res.render('project-form')
 })
 
-// project submit
-router.post('/new-project', function(req, res){
+// project page form
+router.post('/new-project', function(req, res) {
+    
     let name = req.body.name,
         description = req.body.description,
         iframe = req.body.iframe,
@@ -47,13 +48,6 @@ router.post('/new-project', function(req, res){
 
 })
 
-
-// profile form
-router.get('/update-profile', function(req, res){
-	res.render('update-profile')
-})
-
-
 // project page data
 router.get('/:project', function(req, res){
 
@@ -67,7 +61,8 @@ router.get('/:project', function(req, res){
             description: project.description,
             iframe: project.iframe,
             category: project.category,
-            author: project.author.name
+            author: project.author.name,
+            authorLink: project.author.username
         })
     })
 })

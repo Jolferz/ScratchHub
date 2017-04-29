@@ -1,0 +1,17 @@
+{{#if errors}}
+      {{#each errors}}
+        <div class="alert alert-danger">{{msg}}</div>
+      {{/each}}
+{{/if}}
+<div class="form-style-5">
+    <form method="post" action="/profile/{{ user.username }}/update-profile">
+        <fieldset>
+            <legend><span class="number">.</span> Profile Info</legend> 
+            <input name="name" placeholder="Name *" type="text" >
+            <input name="email" placeholder="Email *" type="email" >
+            <textarea name="aboutMe" placeholder="About Me *"></textarea>
+            <textarea name="interests" placeholder="Interests *"></textarea>
+        </fieldset>
+        <input type="submit" value="Update">
+    </form>
+</div>
