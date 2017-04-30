@@ -3,7 +3,9 @@
 let express = require('express'),
 	router = express.Router(),
     User = require('../models/user'),
-	Project = require('../models/project')
+	Project = require('../models/project'),
+	async = require('async'),
+	_ = require('lodash')
 
 
 
@@ -18,11 +20,6 @@ router.post('/:user/update-profile', function(req, res){
 		if (err) return err
 		if (!user) return res.status(404).send()
 
-		let name = req.body.name,
-			email = req.body.email,
-			aboutMe = req.body.aboutMe,
-			interests = req.body.interests
-
 		// form validation
 		req.checkBody('name', 'Only alphabetical characters allowed').isAlpha()
 		req.checkBody('email', 'Must be in an email format').isEmail()
@@ -33,10 +30,10 @@ router.post('/:user/update-profile', function(req, res){
     	let errors = req.validationErrors()
 
 		// update profile
-		user.name = name
-		user.email = email
-		user.aboutMe = aboutMe
-		user.interests = interests
+		if (req.body.name) user.name = req.body.name
+		if (req.body.email) user.email = req.body.email
+		if (req.body.aboutMe) user.aboutMe = req.body.aboutMe
+		if (req.body.interest) user.interests = req.body.interests
 
 		user.save(function(err, updatedUser) {
 			if (err) return err
@@ -45,11 +42,8 @@ router.post('/:user/update-profile', function(req, res){
 		// alerts the user the submission was successful
 		req.flash('success_msg', 'Profile updated succesfully')
 		
-		res.redirect('/profile/' + user)
+		res.redirect('/profile/' + user.username)
 	})
-
-	
-
 })
 
 

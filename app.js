@@ -11,7 +11,9 @@ let express = require('express'),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     mongo = require('mongodb'),
-    mongoose = require('mongoose')
+    mongoose = require('mongoose'),
+    async = require('async'),
+	  _ = require('lodash')
     // uncomment this to run database's tests
     // , testdb = require('./testdb')
 
