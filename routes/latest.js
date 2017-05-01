@@ -1,9 +1,10 @@
 'use strict'
 
-let express = require('express'),
-	router = express.Router()
+let express = require('express')
 
-// latest
+let	router = express.Router()
+
+// 'latest' GET request
 router.get('/', function(req, res){
 	res.render('latest')
 })

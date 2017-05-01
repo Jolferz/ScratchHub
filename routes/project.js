@@ -1,9 +1,10 @@
 'use strict'
 
 let express = require('express'),
-	router = express.Router(),
     User = require('../models/user'),
     Project = require('../models/project')
+
+let	router = express.Router()
 
 // project form
 router.get('/new-project', function(req, res) {
@@ -13,10 +14,11 @@ router.get('/new-project', function(req, res) {
 // project page form
 router.post('/new-project', function(req, res) {
     
+    // form fields' data
     let name = req.body.name,
         description = req.body.description,
-        iframe = req.body.iframe,
         category = req.body.category
+        iframe = req.body.iframe,
     
     // form validation
     req.checkBody('name', 'Name is required').notEmpty()
@@ -51,11 +53,13 @@ router.post('/new-project', function(req, res) {
 // project page data
 router.get('/:project', function(req, res){
 
+    // query for user
 	Project.findOne({name: req.params.project})
     .populate('author')
     .exec(function(err, project) {
         if (err) throw err
 
+        // templating engine variables' values
         res.render('project', {
             name: project.name,
             description: project.description,

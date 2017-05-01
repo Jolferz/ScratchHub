@@ -12,54 +12,55 @@ let express = require('express'),
     LocalStrategy = require('passport-local').Strategy,
     mongo = require('mongodb'),
     mongoose = require('mongoose')
-    // uncomment this to run database's tests
-    // , testdb = require('./testdb')
 
+// database connection
 mongoose.connect('mongodb://localhost/ScratchHub')
+
+// database
 let db = mongoose.connection
 
 // route handlers
-let routes = require('./routes/index'),
+let index = require('./routes/index'),
     users = require('./routes/users'),
     latest = require('./routes/latest'),
     project = require('./routes/project'),
     profile = require('./routes/profile'),
     logout = require('./routes/logout')
 
-// Init App
+// app init
 let app = express()
 
-// gets rid of the db deprecation warning 'Mongoose: mpromise'
+// resolves db deprecation warning 'Mongoose: mpromise'
 mongoose.Promise = require('bluebird')
 
-// View Engine
+// view engine
 app.set('views', path.join(__dirname, 'views'))
 app.engine('handlebars', exphbs({defaultLayout:'layout'}))
 app.set('view engine', 'handlebars')
 
-// BodyParser Middleware
+// bodyParser middleware
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 
-// Set Static Folder
+// set static folder
 app.use(express.static(path.join(__dirname, 'public')))
 
-// express session (don't include the secret in the repository) <===============================
-// express session (don't include the secret in the repository) <===============================
-// express session (don't include the secret in the repository) <===============================
-// express session (don't include the secret in the repository) <===============================
+// express session (don't include the secret in the final app version or repository) <===============================
+// express session (don't include the secret in the final app version or repository) <===============================
+// express session (don't include the secret in the final app version or repository) <===============================
+// express session (don't include the secret in the final app version or repository) <===============================
 app.use(session({
     secret: 'secretish',
     saveUninitialized: true,
     resave: true
 }))
 
-// Passport init
+// passport init
 app.use(passport.initialize())
 app.use(passport.session())
 
-// Express Validator
+// express validator
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
       let namespace = param.split('.'), 
@@ -77,7 +78,7 @@ app.use(expressValidator({
   }
 }))
 
-// flash connection
+// flash init
 app.use(flash())
 
 // global variables
@@ -89,9 +90,8 @@ app.use(function (req, res, next) {
   next()
 })
 
-
 // url requests
-app.use('/', routes)
+app.use('/', index)
 app.use('/index', users)
 app.use('/latest', latest)
 app.use('/project', project)

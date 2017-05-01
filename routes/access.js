@@ -1,26 +1,28 @@
 'use strict'
 
 let express = require('express'),
-	router = express.Router()
+	User = require('../models/user')
 
-let User = require('../models/user')
+let	router = express.Router()
 
-// register GET
+// registration GET request
 router.get('/', function(req, res) {
 	res.render('../views/registration', {
 		title: 'ScratchHub'
 	})
 })
 
-// register POST
+// registration POST request
 router.post('/', function(req, res) {
+	
+	// form fields' data
 	let name = req.body.name,
 		email = req.body.email,
 		username = req.body.username,
 		password = req.body.password,
 		password2 = req.body.password2
 	
-	// validation
+	// form validation
 	req.checkBody('name', 'Name is required').notEmpty()
 	req.checkBody('email', 'Email is required').notEmpty()
 	req.checkBody('email', 'Email is not valid').isEmail()
@@ -28,8 +30,9 @@ router.post('/', function(req, res) {
 	req.checkBody('password', 'Password is required').notEmpty()
 	req.checkBody('password', 'Password do not match').equals(req.body.password)
 
-	var errors = req.validationErrors()
+	let errors = req.validationErrors()
 
+	// if no error found, create new User document in the db
 	if (errors) {
 		res.render('../views/registration', {
 			errors: errors
@@ -46,14 +49,12 @@ router.post('/', function(req, res) {
 			console.log(user)
 		})
 
+		// alerts the user the submission was successful
 		req.flash('success_msg', 'You are registered and can now log in!')
 
+		// redirects the user to the projects page
 		res.redirect('../views/latest ')
 	}
-
-	res.render('../views/registration', {
-		title: 'ScratchHub'
-	})
 })
 
 module.exports = router

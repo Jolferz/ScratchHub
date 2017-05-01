@@ -1,10 +1,10 @@
 'use strict'
 
 let express = require('express'),
-	router = express.Router(),
     User = require('../models/user'),
 	Project = require('../models/project')
 
+let	router = express.Router()
 
 
 // profile edit form
@@ -28,7 +28,7 @@ router.post('/:user/update-profile', function(req, res){
 		// form validation errors
     	let errors = req.validationErrors()
 
-		// update profile
+		// update profile if updated info exists
 		if (req.body.name) user.name = req.body.name
 		if (req.body.email) user.email = req.body.email
 		if (req.body.aboutMe) user.aboutMe = req.body.aboutMe
@@ -42,7 +42,7 @@ router.post('/:user/update-profile', function(req, res){
 		// alerts the user the submission was successful
 		req.flash('success_msg', 'Profile updated succesfully')
 		
-		// redirect to user's profile page
+		// redirect to user's profile
 		res.redirect('/profile/' + user.username)
 	})
 })
@@ -50,11 +50,13 @@ router.post('/:user/update-profile', function(req, res){
 
 // user profile
 router.get('/:user', function(req, res){
-	
+
+	// query for user
 	User.findOne({ username: req.params.user}, function(err, user) {
 		if (err) return res.status(500).send()
 		if (!user) return res.status(404).send()
 		
+		// templating engine variables' values
 		res.render('profile', {
 			username: user.username,
 			name: user.name,
