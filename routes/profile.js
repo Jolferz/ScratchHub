@@ -3,17 +3,16 @@
 let express = require('express'),
 	router = express.Router(),
     User = require('../models/user'),
-	Project = require('../models/project'),
-	async = require('async'),
-	_ = require('lodash')
+	Project = require('../models/project')
 
 
 
+// profile edit form
 router.get('/:user/update-profile', function(req, res) {
 	res.render('profile-form')
 })
 
-// profile edit form
+// user POST profile updates
 router.post('/:user/update-profile', function(req, res){
 	
 	User.findOne({username: req.params.user}, function(err, user) {
@@ -33,8 +32,9 @@ router.post('/:user/update-profile', function(req, res){
 		if (req.body.name) user.name = req.body.name
 		if (req.body.email) user.email = req.body.email
 		if (req.body.aboutMe) user.aboutMe = req.body.aboutMe
-		if (req.body.interest) user.interests = req.body.interests
+		if (req.body.interests) user.interests = req.body.interests
 
+		// save updates
 		user.save(function(err, updatedUser) {
 			if (err) return err
 		})
@@ -42,6 +42,7 @@ router.post('/:user/update-profile', function(req, res){
 		// alerts the user the submission was successful
 		req.flash('success_msg', 'Profile updated succesfully')
 		
+		// redirect to user's profile page
 		res.redirect('/profile/' + user.username)
 	})
 })
