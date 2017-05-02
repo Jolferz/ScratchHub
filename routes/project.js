@@ -17,8 +17,8 @@ router.post('/new-project', function(req, res) {
     // form fields' data
     let name = req.body.name,
         description = req.body.description,
-        category = req.body.category
-        iframe = req.body.iframe,
+        category = req.body.category,
+        iframe = req.body.iframe
     
     // form validation
     req.checkBody('name', 'Name is required').notEmpty()

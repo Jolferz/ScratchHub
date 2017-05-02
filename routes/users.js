@@ -1,9 +1,9 @@
 'use strict'
 
 let express = require('express'),
-		passport = require('passport'),
-		LocalStrategy = require('passport-local').Strategy
-		User = require('../models/user')
+	passport = require('passport'),
+	LocalStrategy = require('passport-local').Strategy,
+	User = require('../models/user')
 
 let	router = express.Router()
 

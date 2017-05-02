@@ -63,7 +63,7 @@ app.use(passport.session())
 // express validator
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
-      let namespace = param.split('.'), 
+      let namespace = param.split('.'),
       root = namespace.shift(),
       formParam = root
 
@@ -99,7 +99,7 @@ app.use('/profile', profile)
 app.use('/logout', logout)
 
 
-// Set Port
+// set port
 app.set('port', (process.env.PORT || 3000))
 
 app.listen(app.get('port'), function(){
