@@ -51,10 +51,10 @@ router.post('/new-project', function(req, res) {
 })
 
 // project page data
-router.get('/:project', function(req, res){
+router.get('/:project', function(req, res) {
 
     // query for user
-	Project.findOne({name: req.params.project})
+	Project.findOne({ name: req.params.project })
     .populate('author')
     .exec(function(err, project) {
         if (err) throw err

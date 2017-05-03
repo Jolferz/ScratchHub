@@ -27,3 +27,9 @@ ProjectSchema.virtual('url').get(function() {
 })
 
 module.exports = mongoose.model('Project', ProjectSchema)
+
+// TESTING
+module.exports.getProjectsByAuthor = function(author, callback) {
+    let query = {author: author}
+    User.find(query, callback)
+}
