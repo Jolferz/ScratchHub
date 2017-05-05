@@ -42,6 +42,14 @@ router.post('/new-project', function(req, res) {
         if (err) return err
     })
 
+    User.findOne({ _id: req.session.passport.user },
+    function(err, user) {
+        user.projects.push(newProject)
+        user.save(function(err) {
+            if (err) return err
+        })
+    })
+
     // alerts the user the submission was successful
     req.flash('success_msg', 'Your project page is live!')
 

@@ -63,7 +63,13 @@ router.get('/:user', function(req, res){
 			email: user.email,
 			aboutMe: user.aboutMe,
 			interests: user.interests,
-			projects: user.projects
+			projects: Project.find({ author: req.session.passport.user },
+			function(err, project) {
+				for (let i = 0; i < project.length; i++) {
+					console.log(project[i].name)
+				}			
+				console.log(req.session.passport.user)
+			})
 		})
 	})
 })

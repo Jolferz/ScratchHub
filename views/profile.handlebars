@@ -32,14 +32,19 @@
 		<div class="bs-callout bs-callout-danger">
 			<h4>Projects</h4>
 			<ul class="list-group">
-			{{#each projects}}
+				{{!-- TESTING project: user.projects --}}
+				{{#each projects}}
+					<li>{{ name }}</li>
+				{{/each}}
+
+			{{!--{{#each projects}}
 					<a class="list-group-item inactive-link" href="/project/{{ this.name }}">
 							<h4 class="list-group-item-heading">{{ this.name }}</h4>
 							<p class="list-group-item-text">
 															{{ this.description }}
 							</p>
 					</a>
-			{{/each}}			
+			{{/each}}			--}}
 			</ul>
 		</div>
 	</div>
