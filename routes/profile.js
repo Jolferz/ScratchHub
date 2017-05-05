@@ -52,10 +52,12 @@ router.post('/:user/update-profile', function(req, res){
 router.get('/:user', function(req, res){
 
 	// query for user
-	User.findOne({ username: req.params.user}, function(err, user) {
+	User.findOne({ username: req.params.user })
+	.populate('projects')
+	.exec(function(err, user) {
 		if (err) return res.status(500).send()
 		if (!user) return res.status(404).send()
-		
+
 		// templating engine variables' values
 		res.render('profile', {
 			username: user.username,
@@ -63,13 +65,7 @@ router.get('/:user', function(req, res){
 			email: user.email,
 			aboutMe: user.aboutMe,
 			interests: user.interests,
-			projects: Project.find({ author: req.session.passport.user },
-			function(err, project) {
-				for (let i = 0; i < project.length; i++) {
-					console.log(project[i].name)
-				}			
-				console.log(req.session.passport.user)
-			})
+			projects: user.projects
 		})
 	})
 })

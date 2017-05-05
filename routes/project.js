@@ -42,6 +42,7 @@ router.post('/new-project', function(req, res) {
         if (err) return err
     })
 
+    // adds the project to the list of projects of the corresponding user and saves the document
     User.findOne({ _id: req.session.passport.user },
     function(err, user) {
         user.projects.push(newProject)
