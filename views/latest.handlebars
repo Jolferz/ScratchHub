@@ -1,14 +1,15 @@
 <div class="container">
     <div class="row">    
         <div class="col-md-10 col-md-offset-1">
-            <div class="card">
-                <div class="card-image">
-                    <img class="img-responsive" src="imgs/scratch.jpg"> 
-                </div><!-- card image -->
-                <div class="card-content">
-                    <span class="card-title"><a href="/project/Scratch%20&%20Dodge">Scratch & Dodge<a></span>                    
-                </div><!-- card content -->
-            </div>
+            {{#each projects}}
+                <div class="card">
+                    <div class="card-content">
+                        <p class="card-title"><a href="/project/{{ this.name }}">{{ this.name }}<a></p>
+                        <span class="card-title date">May 5, 2017</span>                    
+                    </div><!-- card content -->
+                    <br>
+                </div>
+            {{/each}}
         </div>
     </div>
 </div>

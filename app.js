@@ -11,7 +11,8 @@ let express = require('express'),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     mongo = require('mongodb'),
-    mongoose = require('mongoose')
+    mongoose = require('mongoose'),
+    moment = require('moment')
 
 // database connection
 mongoose.connect('mongodb://localhost/ScratchHub')

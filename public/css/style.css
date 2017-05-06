@@ -111,21 +111,34 @@ footer{
 }*/
 
 .card{
-    font-family: 'Roboto', sans-serif; 
-    margin-bottom: 50px;
-    position: relative;
-    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 4 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	font-family: 'Roboto', sans-serif; 
+	margin-bottom: 50px;
+	position: relative;
+	-webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	-moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	box-shadow: 4 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
 .card .card-content {
-    padding: 10px;    
+    padding: 10px; 
+}
+
+.card-content .date {
+	display: inline-block;
+	font-size: 14px !important;
+	color: lightgray;
+	float: right;
+	padding: 10px;
 }
 
 .card .card-content .card-title, .card-reveal .card-title{
     font-size: 24px;
     font-weight: 200;    
+}
+
+.card-title {
+  font-size: 24px;
+  display: inline-block;
 }
 
 .card .card-action{

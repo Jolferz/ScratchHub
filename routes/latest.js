@@ -1,12 +1,23 @@
 'use strict'
 
-let express = require('express')
+let express = require('express'),
+	Project = require('../models/project')
 
 let	router = express.Router()
 
 // 'latest' GET request
 router.get('/', function(req, res){
-	res.render('latest')
+
+	Project.find({ })
+	.populate('author')
+	.exec(function(err, project) {
+		if (err) return res.status(500).send()
+
+		res.render('latest', {
+			projects: project
+		})
+	})
 })
+
 
 module.exports = router
