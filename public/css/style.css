@@ -321,3 +321,46 @@ ul li a {
   text-decoration: none;
 }
 
+/* Upload button */
+
+#upload-input {
+  display: none;
+}
+
+.btn:focus, .upload-btn:focus{
+  outline: 0 !important;
+}
+
+.upload-btn {
+  color: #ffffff;
+  background-color: #F89406;
+  border: none;
+  border-radius: 0px;
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 50px;
+}
+
+.upload-btn:hover,
+.upload-btn:focus,
+.upload-btn:active,
+.upload-btn.active {
+  color: #ffffff;
+  background-color: #FA8900;
+  border: none;
+}
+
+.panel {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+#upload-input {
+  display: none;
+}
+
+.progress {
+  margin-top: 7px;
+  margin-bottom: 0px;
+  background-color: #e8eeef;
+}

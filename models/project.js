@@ -15,6 +15,9 @@ let ProjectSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
         max: 1
+    },
+    image: {
+
     }
 }, {
     toObject: {virtuals : true},

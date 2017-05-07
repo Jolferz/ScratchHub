@@ -11,6 +11,10 @@ router.get('/new-project', function(req, res) {
 	res.render('project-form')
 })
 
+router.get('/upload', function(req, res) {
+	res.render('upload')
+})
+
 // project page form
 router.post('/new-project', function(req, res) {
     
