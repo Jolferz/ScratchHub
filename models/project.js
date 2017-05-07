@@ -17,7 +17,8 @@ let ProjectSchema = Schema({
         max: 1
     },
     image: {
-
+        type: Buffer,
+        max: 1
     }
 }, {
     toObject: {virtuals : true},

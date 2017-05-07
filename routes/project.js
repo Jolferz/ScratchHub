@@ -2,7 +2,10 @@
 
 let express = require('express'),
     User = require('../models/user'),
-    Project = require('../models/project')
+    Project = require('../models/project'),
+    path = require('path'),
+    formidable = require('formidable'),
+    fs = require('fs')
 
 let	router = express.Router()
 
@@ -54,6 +57,39 @@ router.post('/new-project', function(req, res) {
             if (err) return err
         })
     })
+
+
+    // ====================  UPLOAD BUTTON START ========================= //
+    // upload button handler
+    // create an incoming form object
+    let form = new formidable.IncomingForm()
+
+    // specify that we want to allow the user to upload multiple files in a single request
+    form.multiples = false
+
+    // store all uploads in the /new-project directory
+    form.uploadDir = path.join(__dirname, '/new-project')
+
+    // every time a file has been uploaded successfully,
+    // rename it to it's orignal name
+    form.on('file', function(field, file) {
+        fs.rename(file.path, path.join(form.uploadDir, file.name))
+    })
+
+    // log any errors that occur
+    form.on('error', function(err) {
+        console.log('An error has occured: \n' + err)
+    })
+
+    // once all the files have been uploaded, send a response to the client
+    form.on('end', function() {
+        res.end('success')
+    })
+
+    // parse the incoming request containing the form data
+    form.parse(req)
+    // ====================  UPLOAD BUTTON END ========================= //
+
 
     // alerts the user the submission was successful
     req.flash('success_msg', 'Your project page is live!')
