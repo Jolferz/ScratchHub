@@ -1,7 +1,8 @@
 'use strict'
 
 let express = require('express'),
-	Project = require('../models/project')
+	Project = require('../models/project'),
+	exphbs = require('express-handlebars')
 
 let	router = express.Router()
 

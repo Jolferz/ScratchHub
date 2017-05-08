@@ -5,27 +5,40 @@ let express = require('express'),
     Project = require('../models/project'),
     path = require('path'),
     formidable = require('formidable'),
-    fs = require('fs')
+    fs = require('fs'),
+    multer = require('multer')
 
+// router
 let	router = express.Router()
+
+// image storage
+let storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, req.body.name +'.png' )
+    }
+})
+
+let upload = multer({ storage: storage })
 
 // project form
 router.get('/new-project', function(req, res) {
 	res.render('project-form')
 })
 
-router.get('/upload', function(req, res) {
-	res.render('upload')
-})
-
 // project page form
-router.post('/new-project', function(req, res) {
+router.post('/new-project', upload.single('projectImage'), function(req, res) {
     
     // form fields' data
     let name = req.body.name,
         description = req.body.description,
         category = req.body.category,
         iframe = req.body.iframe
+
+    // image object print
+    console.log(req.file)
     
     // form validation
     req.checkBody('name', 'Name is required').notEmpty()
@@ -57,38 +70,6 @@ router.post('/new-project', function(req, res) {
             if (err) return err
         })
     })
-
-
-    // ====================  UPLOAD BUTTON START ========================= //
-    // upload button handler
-    // create an incoming form object
-    let form = new formidable.IncomingForm()
-
-    // specify that we want to allow the user to upload multiple files in a single request
-    form.multiples = false
-
-    // store all uploads in the /new-project directory
-    form.uploadDir = path.join(__dirname, '/new-project')
-
-    // every time a file has been uploaded successfully,
-    // rename it to it's orignal name
-    form.on('file', function(field, file) {
-        fs.rename(file.path, path.join(form.uploadDir, file.name))
-    })
-
-    // log any errors that occur
-    form.on('error', function(err) {
-        console.log('An error has occured: \n' + err)
-    })
-
-    // once all the files have been uploaded, send a response to the client
-    form.on('end', function() {
-        res.end('success')
-    })
-
-    // parse the incoming request containing the form data
-    form.parse(req)
-    // ====================  UPLOAD BUTTON END ========================= //
 
 
     // alerts the user the submission was successful

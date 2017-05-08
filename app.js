@@ -14,6 +14,7 @@ let express = require('express'),
     mongoose = require('mongoose'),
     moment = require('moment')
 
+
 // database connection
 mongoose.connect('mongodb://localhost/ScratchHub')
 
@@ -38,6 +39,14 @@ mongoose.Promise = require('bluebird')
 app.set('views', path.join(__dirname, 'views'))
 app.engine('handlebars', exphbs({defaultLayout:'layout'}))
 app.set('view engine', 'handlebars')
+
+//handlebars custom helpers 
+let hbs = require('handlebars')
+
+hbs.registerHelper( 'concat', function(filename) {
+    return filename + '.png';
+})
+
 
 // bodyParser middleware
 app.use(bodyParser.json())

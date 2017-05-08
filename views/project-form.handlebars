@@ -4,7 +4,7 @@
       {{/each}}
 {{/if}}
 <div class="form-style-5">
-    <form method="post" action="/project/new-project">
+    <form method="post" action="/project/new-project" enctype="multipart/form-data">
         <fieldset>
             <legend><span class="number">1</span> Project Info</legend> 
             <input name="name" placeholder="Name *" type="text" required>
@@ -42,7 +42,7 @@
             <div class="progress">
                 <div class="progress-bar" role="progressbar"></div>
             </div><button class="btn btn-lg upload-btn" type="button">Upload Image</button>
-            <input id="upload-input" type="file" name="uploads[]"></br>
+            <input id="upload-input" type="file" name="projectImage" class="form-control"/></br>
         </fieldset>
         <input type="submit" value="Publish Project">
     </form>
