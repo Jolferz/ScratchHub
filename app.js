@@ -27,7 +27,8 @@ let index = require('./routes/index'),
     latest = require('./routes/latest'),
     project = require('./routes/project'),
     profile = require('./routes/profile'),
-    logout = require('./routes/logout')
+    logout = require('./routes/logout'),
+    uploads = require('./routes/uploads')
 
 // app init
 let app = express()
@@ -107,6 +108,7 @@ app.use('/latest', latest)
 app.use('/project', project)
 app.use('/profile', profile)
 app.use('/logout', logout)
+app.use('/uploads', uploads)
 
 
 // set port
