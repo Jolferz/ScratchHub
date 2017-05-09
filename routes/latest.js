@@ -20,11 +20,5 @@ router.get('/', function(req, res){
 	})
 })
 
-// testing project image
-router.get('/uploads/:img', function(req, res) {
-    console.log(req.params.img)
-    res.send(req.params.img + '.png')
-})
-
 
 module.exports = router

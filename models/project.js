@@ -17,9 +17,11 @@ let ProjectSchema = Schema({
         max: 1
     },
     image: {
-        type: Buffer,
+        type: String,
         max: 1
-    }
+    },
+    cardDate: String,
+    date: Date
 }, {
     toObject: {virtuals : true},
     toJSON: {virtuals : true}

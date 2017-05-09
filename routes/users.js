@@ -46,7 +46,7 @@ router.post('/register', function(req, res){
 	// if no error found, create new User document in the db
 	if (errors) {
 		res.render('register', {
-			errors:errors
+			errors: errors
 		})
 	} else {
 		let newUser = new User({

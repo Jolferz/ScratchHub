@@ -41,13 +41,13 @@ app.set('views', path.join(__dirname, 'views'))
 app.engine('handlebars', exphbs({defaultLayout:'layout'}))
 app.set('view engine', 'handlebars')
 
-//handlebars custom helpers 
+// handlebars module 
 let hbs = require('handlebars')
 
+// handlebars custom helpers
 hbs.registerHelper( 'concat', function(filename) {
     return filename + '.png';
 })
-
 
 // bodyParser middleware
 app.use(bodyParser.json())
@@ -57,8 +57,6 @@ app.use(cookieParser())
 // set static folder
 app.use(express.static(path.join(__dirname, 'public')))
 
-// express session (don't include the secret in the final app version or repository) <===============================
-// express session (don't include the secret in the final app version or repository) <===============================
 // express session (don't include the secret in the final app version or repository) <===============================
 // express session (don't include the secret in the final app version or repository) <===============================
 app.use(session({

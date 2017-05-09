@@ -6,12 +6,14 @@ let express = require('express'),
     path = require('path'),
     formidable = require('formidable'),
     fs = require('fs'),
-    multer = require('multer')
+    multer = require('multer'),
+    sizeOf = require('image-size'),
+    moment = require('moment')
 
 // router
 let	router = express.Router()
 
-// image storage
+// image storage and filename renamed same as project
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/')
@@ -36,48 +38,75 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
         description = req.body.description,
         category = req.body.category,
         iframe = req.body.iframe
-
-    // image object print
-    console.log(req.file)
     
-    // form validation
-    req.checkBody('name', 'Name is required').notEmpty()
-    req.checkBody('description', 'Add a description').notEmpty()
-    req.checkBody('iframe', 'iframe is required').notEmpty()
-
+    // // form validation
+    req.checkBody({
+        'name': {
+            notEmpty: true,
+            isLength: {
+                options: [{ min: 2, max: 30 }],
+                errorMessage: 'Name length must contain between 2 and 15 characters'
+            },
+            errorMessage: 'Invalid name'
+        },
+        'description': {
+            isLength: {
+                options: [{ max: 500 }]
+            },
+            errorMessage: 'Invalid description'
+        },
+        'iframe': {
+            notEmpty: true,
+            isLength: {
+                options: [{ max: 500 }]
+            },
+            errorMessage: 'iframe is required'
+        }    
+    })
+    
     // form validation errors
     let errors = req.validationErrors()
+    console.log(moment().calendar())
+    
+    if (errors) {
+        res.render('project-form', {
+            errors: errors
+        })
+    } else {
+        // creates new project
+        let newProject = new Project({
+            name: name,
+            description: description,
+            iframe: iframe,
+            category: category,
+            author: req.session.passport.user,
+            image: name + '.png',
+            date: Date.now(),
+            cardDate: moment().format('MMMM Do YYYY, h:mm a')
+        })
 
-    // creates new project
-    let newProject = new Project({
-        name: name,
-        description: description,
-        iframe: iframe,
-        category: category,
-        author: req.session.passport.user
-    })
-   
-    // saves the project
-    newProject.save(function(err) {
-        if (err) return err
-    })
-
-    // adds the project to the list of projects of the corresponding user and saves the document
-    User.findOne({ _id: req.session.passport.user },
-    function(err, user) {
-        user.projects.push(newProject)
-        user.save(function(err) {
+        // saves the project
+        newProject.save(function(err) {
             if (err) return err
         })
-    })
 
+        console.log(newProject)
 
-    // alerts the user the submission was successful
-    req.flash('success_msg', 'Your project page is live!')
+        // adds the project to the list of projects of the corresponding user and saves the document
+        User.findOne({ _id: req.session.passport.user },
+        function(err, user) {
+            user.projects.push(newProject)
+            user.save(function(err) {
+                if (err) return err
+            })
+        })
+        
+        // alerts the user the submission was successful
+        req.flash('success_msg', 'Your project page is live!')
 
-    // redirects the user to the projects page
-	res.redirect('/project/' + name)
-
+        // redirects the user to the projects page
+        res.redirect('/project/' + name)
+    }
 })
 
 // project page data

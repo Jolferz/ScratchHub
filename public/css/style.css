@@ -123,12 +123,21 @@ footer{
     padding: 10px; 
 }
 
+.card-content img {
+    width: 100%;
+}
+
 .card-content .date {
 	display: inline-block;
 	font-size: 14px !important;
 	color: lightgray;
 	float: right;
 	padding: 10px;
+}
+
+.card-content .project-info {
+    margin-top: 20px;
+    margin-bottom: -15px;
 }
 
 .card .card-content .card-title, .card-reveal .card-title{

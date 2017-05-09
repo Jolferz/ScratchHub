@@ -8,7 +8,7 @@ let	router = express.Router()
 
 // testing project image
 router.get('/:img', function(req, res) {
-    res.json(req.params.img)
+	res.sendFile('/uploads/' + req.params.img, { root: './'})
 })
 
 
