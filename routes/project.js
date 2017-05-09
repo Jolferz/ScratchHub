@@ -66,7 +66,6 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
     
     // form validation errors
     let errors = req.validationErrors()
-    console.log(moment().calendar())
     
     if (errors) {
         res.render('project-form', {
