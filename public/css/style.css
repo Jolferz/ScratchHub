@@ -27,6 +27,11 @@ body {
   line-height: 40px;
 }
 
+.logo {
+  width: 170px;
+  height: 70px;
+}
+
 /* Custom page footer */
 .footer {
   padding-top: 19px;
@@ -324,6 +329,11 @@ iframe {
 .bs-callout-danger {
   margin: 20px;
   text-decoration: none;
+}
+
+ul.nav {
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 ul li a {
