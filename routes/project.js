@@ -39,30 +39,15 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
         category = req.body.category,
         iframe = req.body.iframe
     
-    // // form validation
-    req.checkBody({
-        'name': {
-            notEmpty: true,
-            isLength: {
-                options: [{ min: 2, max: 30 }],
-                errorMessage: 'Name length must contain between 2 and 15 characters'
-            },
-            errorMessage: 'Invalid name'
-        },
-        'description': {
-            isLength: {
-                options: [{ max: 500 }]
-            },
-            errorMessage: 'Invalid description'
-        },
-        'iframe': {
-            notEmpty: true,
-            isLength: {
-                options: [{ max: 500 }]
-            },
-            errorMessage: 'iframe is required'
-        }    
-    })
+    // form validation
+    if (name === 'default') {
+        // if name is 'default', return an error and ask the user to choose a different one
+        req.checkBody('name', 'The name \'default\' is not valid. Please, choose a different name for your project.').isEmpty()
+    } else {
+        req.checkBody('name', 'Name length must contain between 2 and 15 characters').notEmpty().isLength([{ min: 2, max: 30 }])
+    }
+    req.checkBody('description', 'Invalid description').isLength([{ max: 500 }])
+    req.checkBody('iframe', 'iframe is required').notEmpty().isLength([{ max: 500 }])
 
     // form validation errors
     let errors = req.validationErrors()
