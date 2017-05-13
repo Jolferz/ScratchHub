@@ -39,30 +39,16 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
         category = req.body.category,
         iframe = req.body.iframe
     
-    // // form validation
-    req.checkBody({
-        'name': {
-            notEmpty: true,
-            isLength: {
-                options: [{ min: 2, max: 30 }],
-                errorMessage: 'Name length must contain between 2 and 15 characters'
-            },
-            errorMessage: 'Invalid name'
-        },
-        'description': {
-            isLength: {
-                options: [{ max: 500 }]
-            },
-            errorMessage: 'Invalid description'
-        },
-        'iframe': {
-            notEmpty: true,
-            isLength: {
-                options: [{ max: 500 }]
-            },
-            errorMessage: 'iframe is required'
-        }    
-    })
+    // form inputs validation
+    if (name === 'default') {
+        // if name is 'default', return an error and ask the user to choose a different one
+        req.checkBody('name', 'The name \'default\' is not valid. Please, choose a different name for your project.').isEmpty()
+    } else {
+        req.checkBody('name', 'Name length must contain between 2 and 15 characters').notEmpty().isLength([{ min: 2, max: 30 }])
+    }
+    req.checkBody('description', 'Invalid description').isLength([{ max: 500 }])
+    req.checkBody('iframe', 'iframe is required').notEmpty().isLength([{ max: 500 }])
+
 
     // form validation errors
     let errors = req.validationErrors()
@@ -91,8 +77,9 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
             cardDate: moment().format('MMMM Do YYYY')
         })
 
+        // if the user chose not to upload an image, the image name for the project 
+        // will change to default and the program will assign accordingly
         if (!fs.existsSync('uploads/' + name + '.png')) {
-            console.log('conditional is working <------------')
             newProject.image = 'default'
         }
 
@@ -128,6 +115,12 @@ router.get('/:project', function(req, res) {
     .exec(function(err, project) {
         if (err) throw err
 
+        // delete button in profile if the user is the author of the project
+        let dltBtn = false
+        if (req.session.passport.user == project.author._id) {
+            dltBtn = !dltBtn
+        }
+
         // templating engine variables' values
         res.render('project', {
             name: project.name,
@@ -135,7 +128,8 @@ router.get('/:project', function(req, res) {
             iframe: project.iframe,
             category: project.category,
             author: project.author.name,
-            authorLink: project.author.username
+            authorLink: project.author.username,
+            dltBtn: dltBtn
         })
     })
 })

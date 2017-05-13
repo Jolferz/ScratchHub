@@ -14,7 +14,6 @@
 				<ul class="list-group">
 					<li class="list-group-item"><strong>Username: </strong>{{ username }}</li>
 					<li class="list-group-item"><strong>Real name: </strong>{{ name }}</li>
-					<li class="list-group-item"></i><strong>Email: </strong>{{ email }}</li>
 				</ul>
 				<p><a href="/profile/{{ user.username }}/update-profile">Edit</a></p>
 			</div>
@@ -26,23 +25,19 @@
 		<p> {{ aboutMe }} </p>
 	</div>
 	<div class="bs-callout bs-callout-danger">
-		<h4>Interests</h4>
-		<p> {{ interests }} </p>
-	</div>
-		<div class="bs-callout bs-callout-danger">
-			<h4>Projects</h4>
-			<ul class="list-group">
+		<h4>Projects</h4>
+		<ul class="list-group">
 
-			{{#each projects}}
-				<a class="list-group-item inactive-link" href="/project/{{ this.name }}">
-					<h4 class="list-group-item-heading">{{ this.name }}</h4>
-					<p class="list-group-item-text">
-						{{ this.description }}
-					</p>
-				</a>
-			{{/each}}
-			</ul>
-		</div>
+		{{#each projects}}
+			<a class="list-group-item inactive-link" href="/project/{{ this.name }}">
+				<h4 class="list-group-item-heading">{{ this.name }}</h4>
+				<p class="list-group-item-text">
+					{{ this.description }}
+				</p>
+			</a>
+		{{/each}}
+		</ul>
+	</div>
 	</div>
 </div>
 <!-- resume -->
