@@ -32,7 +32,7 @@ router.get('/new-project', function(req, res) {
 
 // project page form
 router.post('/new-project', upload.single('projectImage'), function(req, res) {
-    
+
     // form fields' data
     let name = req.body.name,
         description = req.body.description,
@@ -63,11 +63,18 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
             errorMessage: 'iframe is required'
         }    
     })
-    
+
     // form validation errors
     let errors = req.validationErrors()
-    
+
+    // validation error triggered. 
     if (errors) {
+        // checks if image name is equal to 'default.png' (avoids deleting default image when user fails to provide one.
+        if (('uploads/' + name + '.png') !== 'uploads/default.png') { 
+            fs.unlink('uploads/' + name + '.png', function(cb){
+               // image deleted from database 
+            })
+        }
         res.render('project-form', {
             errors: errors
         })
@@ -81,8 +88,13 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
             author: req.session.passport.user,
             image: name + '.png',
             date: Date.now(),
-            cardDate: moment().format('MMMM Do YYYY, h:mm a')
+            cardDate: moment().format('MMMM Do YYYY')
         })
+
+        if (!fs.existsSync('uploads/' + name + '.png')) {
+            console.log('conditional is working <------------')
+            newProject.image = 'default'
+        }
 
         // saves the project
         newProject.save(function(err) {
@@ -110,7 +122,6 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
 
 // project page data
 router.get('/:project', function(req, res) {
-
     // query for user
 	Project.findOne({ name: req.params.project })
     .populate('author')
