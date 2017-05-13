@@ -340,6 +340,16 @@ ul li a {
   text-decoration: none;
 }
 
+#delete-btn button {
+  background-color: red; 
+  color: white;
+  border: none;
+  border-radius: 3px;
+  text-decoration: none;
+  float: right;
+  margin-right: 30px;
+}
+
 /* Upload button */
 
 #upload-input {
