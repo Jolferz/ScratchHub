@@ -1,6 +1,10 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,300);
 @import url(//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css);
 
+* {
+  outline: none;
+}
+
 /* Space out content a bit */
 body {
   padding-top: 20px;
@@ -341,13 +345,25 @@ ul li a {
 }
 
 #delete-btn button {
-  background-color: red; 
+  background-color: #dd6b55; 
   color: white;
+  float: right;
   border: none;
   border-radius: 3px;
   text-decoration: none;
-  float: right;
   margin-right: 30px;
+  outline: none;
+}
+
+#edit-btn button {
+  float: right;
+  background-color: #3fc3ee; 
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  text-decoration: none;
+  margin-right: 10px;
+  outline: none;
 }
 
 /* Upload button */

@@ -58,6 +58,14 @@ router.get('/:user', function(req, res){
 		if (err) return res.status(500).send()
 		if (!user) return res.status(404).send()
 
+		// adds edit button in profile if the user is the owner of the page
+        // NOTE: triple equals won't apply to this case as the session passport
+        // is a string and the _id is an object.
+        let editBtn = false
+        if (req.session.passport.user == user._id) {
+            editBtn = !editBtn
+        }
+
 		// templating engine variables' values
 		res.render('profile', {
 			username: user.username,
@@ -65,7 +73,8 @@ router.get('/:user', function(req, res){
 			email: user.email,
 			aboutMe: user.aboutMe,
 			interests: user.interests,
-			projects: user.projects
+			projects: user.projects,
+			editBtn: editBtn
 		})
 	})
 })

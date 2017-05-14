@@ -25,10 +25,35 @@ let storage = multer.diskStorage({
 
 let upload = multer({ storage: storage })
 
+
+
+// project edit form
+router.get('/:project/update-project', function(req, res) {
+	res.render('project-form')
+})
+
+
+
+// project delete
+router.delete('/project-delete', function(req, res) {
+
+    let user = req.session.passport._id
+
+    User.findOne({ user })
+    .populate('projects')
+    .exec(function(err, user) {
+        console.log(user)
+    })
+})
+
+
+
 // project form
 router.get('/new-project', function(req, res) {
 	res.render('project-form')
 })
+
+
 
 // project page form
 router.post('/new-project', upload.single('projectImage'), function(req, res) {
@@ -107,6 +132,8 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
     }
 })
 
+
+
 // project page data
 router.get('/:project', function(req, res) {
     // query for user
@@ -115,7 +142,9 @@ router.get('/:project', function(req, res) {
     .exec(function(err, project) {
         if (err) throw err
 
-        // delete button in profile if the user is the author of the project
+        // adds delete button in profile if the user is the author of the project
+        // NOTE: triple equals won't apply to this case as the session is a string 
+        // and the _id is an object.
         let dltBtn = false
         if (req.session.passport.user == project.author._id) {
             dltBtn = !dltBtn

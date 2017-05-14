@@ -6,10 +6,10 @@ let express = require('express'),
 
 let	router = express.Router()
 
-// 'latest' GET request
+// main feed
 router.get('/', function(req, res){
 
-	Project.find({ })
+	Project.find({ /* all */ })
 	.populate('author')
 	.exec(function(err, project) {
 		if (err) return res.status(500).send()

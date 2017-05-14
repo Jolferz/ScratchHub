@@ -28,6 +28,7 @@
     "multer": "^1.3.0",
     "passport": "*",
     "passport-http": "*",
-    "passport-local": "*"
+    "passport-local": "*",
+    "sweetalert2": "^6.6.2"
   }
 }

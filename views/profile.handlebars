@@ -15,7 +15,11 @@
 					<li class="list-group-item"><strong>Username: </strong>{{ username }}</li>
 					<li class="list-group-item"><strong>Real name: </strong>{{ name }}</li>
 				</ul>
-				<p><a href="/profile/{{ user.username }}/update-profile">Edit</a></p>
+				{{#if editBtn}}
+                    <div id="edit-btn">
+                        <a href="/profile/{{ user.username }}/update-profile"><button>Edit</button></a>
+                    </div>
+                {{/if}}
 			</div>
 			</div>
 		</div>
