@@ -132,16 +132,18 @@ router.delete('/:user/project-delete', function(req, res) {
     let user = req.session.passport._id
 
     Project.findOneAndRemove({ name: req.params.user }, function(err, user) {
+        if (err) return err
+
         // remove document and project's image <<<<<<<<<<<<<<<<<<<<<<<<<<
         console.log(' ')
         console.log('user removed: ' + user)
         
-        // alerts the user the removal was successful
-        req.flash('success_msg', 'Project removed succesfully')
-
-        // redirect to the 'latest' section
-        res.send('latest')
     })
+
+    // alerts the user the removal was successful
+    req.flash('success_msg', 'Project removed succesfully') 
+
+    res.send(JSON.stringify(user))
 })
 
 

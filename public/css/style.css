@@ -83,7 +83,7 @@ body {
   }
   /* Space out the masthead */
   .header {
-    margin-bottom: 30px;
+    margin-bottom: 45px;
   }
   /* Remove the bottom border on the jumbotron for visual effect */
   .jumbotron {
@@ -333,11 +333,6 @@ iframe {
 .bs-callout-danger {
   margin: 20px;
   text-decoration: none;
-}
-
-ul.nav {
-  padding-top: 15px;
-  padding-bottom: 15px;
 }
 
 ul li a {
