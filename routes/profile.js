@@ -6,49 +6,85 @@ let express = require('express'),
 
 let	router = express.Router()
 
-
-// profile edit form
+// =============================== //
+// 		  profile update form      //
+// =============================== //
 router.get('/:user/update-profile', function(req, res) {
-	res.render('profile-form')
+	res.render('profile-update-form')
 })
 
-// user POST profile updates
+
+// =============================== //
+// 	  profile POST UPDATES    	   //
+// =============================== //
 router.post('/:user/update-profile', function(req, res){
 	
+	// query for the user
 	User.findOne({username: req.params.user}, function(err, user) {
 		if (err) return err
 		if (!user) return res.status(404).send()
 
 		// form validation
-		req.checkBody('name', 'Only alphabetical characters allowed').isAlpha()
-		req.checkBody('email', 'Must be in an email format').isEmail()
-		req.checkBody('aboutMe', 'Only alphabetical characters allowed').isAlpha()
-		req.checkBody('interests', 'Only alphabetical characters allowed').isAlpha()
+		req.checkBody({
+			'name': {
+				optional: {
+					options: {
+						checkFalsy: true
+					}
+				},
+				isLength: {
+					options: [{
+						min: 3,
+						max: 30
+					}],
+					errorMessage: '\'Name\' can have between 3 and 30 characters long.'
+				}
+			},
+			'aboutMe': {
+				optional: {
+					options: {
+						checkFalsy: true
+					}
+				},
+				isLength: {
+					options: [{
+						min: 3,
+						max: 500
+					}]
+				}
+			}
+		})
 
 		// form validation errors
     	let errors = req.validationErrors()
 
-		// update profile if updated info exists
-		if (req.body.name) user.name = req.body.name
-		if (req.body.email) user.email = req.body.email
-		if (req.body.aboutMe) user.aboutMe = req.body.aboutMe
-		if (req.body.interests) user.interests = req.body.interests
+		if (errors) {
+			res.render('profile-update-form', {
+				errors: errors
+			})
+		} else {
+			// update profile if updated info exists
+			if (req.body.name) user.name = req.body.name
+			if (req.body.aboutMe) user.aboutMe = req.body.aboutMe
 
-		// save updates
-		user.save(function(err, updatedUser) {
-			if (err) return err
-		})
+			// save updates
+			user.save(function(err, updatedUser) {
+				if (err) return err
+			})
 
-		// alerts the user the submission was successful
-		req.flash('success_msg', 'Profile updated succesfully')
-		
-		// redirect to user's profile
-		res.redirect('/profile/' + user.username)
+			// alerts the user the submission was successful
+			req.flash('success_msg', 'Profile updated succesfully')
+			
+			// redirect to user's profile
+			res.redirect('/profile/' + user.username)
+		}	
 	})
 })
 
 
-// user profile
+// =============================== //
+// 			user profile    	   //
+// =============================== //
 router.get('/:user', function(req, res){
 
 	// query for user

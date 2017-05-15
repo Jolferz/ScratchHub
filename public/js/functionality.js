@@ -1,6 +1,7 @@
 let deleteButton = document.getElementById('delete-btn')
 
 deleteButton.onclick = function() {
+    console.log(window.location.pathname)
     swal({
         title: "Delete this project?",
         text: "",
@@ -11,10 +12,9 @@ deleteButton.onclick = function() {
         preConfirm: function() {
             return new Promise(function(resolve) {
                 resolve($.ajax({
-                    url: '/project/project-delete',
+                    url: window.location.pathname + '/project-delete',
                     method: 'DELETE',
                     contentType: 'application/json',
-                    xml: window.location.pathname,
                     success: function(res) {
                         // give control to the route
                     }

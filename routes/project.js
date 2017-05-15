@@ -7,7 +7,6 @@ let express = require('express'),
     formidable = require('formidable'),
     fs = require('fs'),
     multer = require('multer'),
-    sizeOf = require('image-size'),
     moment = require('moment')
 
 // router
@@ -26,36 +25,137 @@ let storage = multer.diskStorage({
 let upload = multer({ storage: storage })
 
 
-
-// project edit form
+// =============================== //
+//     project GET UPDATE form     //
+// =============================== //
 router.get('/:project/update-project', function(req, res) {
-	res.render('project-form')
+    res.render('project-update-form')
 })
 
+// =============================== //
+//       project POST UPDATES      //
+// =============================== //
+router.post('/:project/update-project', function(req, res) {
 
+    // query for the project
+    Project.findOne({ name: req.params.project }, function(err, project) {
+        if (err) return err
+		if (!project) return res.status(404).send()
 
-// project delete
-router.delete('/project-delete', function(req, res) {
+        // form validation
+        if (req.body.name === 'default') {
+            console.log('ENTERED default conditional')
+            req.checkBody({
+                'name': {
+                    isEmpty: false,
+                    errorMessage: 'The name \'default\' is not valid. Please, choose a different name for your project.'
+                },
+                'description': {
+                    optional: {
+                        options: {
+                            checkFalsy: true
+                        }
+                    },
+                    isLength: {
+                        options: [{
+                            min: 3,
+                            max: 500
+                        }]
+                    }
+                }
+            })            
+        } else {
+            console.log('FAILED default conditional')
+            req.checkBody({
+                'name': {
+                    optional: {
+                        options: {
+                            checkFalsy: true
+                        }
+                    },
+                    isLength: {
+                        options: [{
+                            min: 3,
+                            max: 30
+                        }],
+                        errorMessage: '\'Name\' can have between 3 and 30 characters long.'
+				    }
+                },
+                'description': {
+                    optional: {
+                        options: {
+                            checkFalsy: true
+                        }
+                    },
+                    isLength: {
+                        options: [{
+                            min: 3,
+                            max: 500
+                        }]
+                    }
+                }
+            })
+        }
+        
+        // form validation errors
+    	let errors = req.validationErrors()
 
-    let user = req.session.passport._id
+        if (errors) {
+			res.render('project-update-form', {
+				errors: errors
+			})
+        } else {
+            // update project if updated info exists
+            if (req.body.name) project.name = req.body.name
+            if (req.body.description) project.description = req.body.description
+            if (req.body.category) project.category = req.body.category
 
-    User.findOne({ user })
-    .populate('projects')
-    .exec(function(err, user) {
-        console.log(user)
+            project.save(function(err, updatedProject) {
+                if (err) return err
+            })
+
+            // alerts the user the submission was successful
+            req.flash('success_msg', 'Project updated succesfully')
+            
+            // redirect to user's profile
+            res.redirect('/project/' + project.name)
+        }
     })
 })
 
 
+// =============================== //
+//         project DELETE          //
+// =============================== //
+router.delete('/:user/project-delete', function(req, res) {
 
-// project form
+    let user = req.session.passport._id
+
+    Project.findOneAndRemove({ name: req.params.user }, function(err, user) {
+        // remove document and project's image <<<<<<<<<<<<<<<<<<<<<<<<<<
+        console.log(' ')
+        console.log('user removed: ' + user)
+        
+        // alerts the user the removal was successful
+        req.flash('success_msg', 'Project removed succesfully')
+
+        // redirect to the 'latest' section
+        res.send('latest')
+    })
+})
+
+
+// =============================== //
+//        project GET form         //
+// =============================== //
 router.get('/new-project', function(req, res) {
 	res.render('project-form')
 })
 
 
-
-// project page form
+// =============================== //
+//        project POST form        //
+// =============================== //
 router.post('/new-project', upload.single('projectImage'), function(req, res) {
 
     // form fields' data
@@ -71,6 +171,7 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
     } else {
         req.checkBody('name', 'Name length must contain between 2 and 15 characters').notEmpty().isLength([{ min: 2, max: 30 }])
     }
+
     req.checkBody('description', 'Invalid description').isLength([{ max: 500 }])
     req.checkBody('iframe', 'iframe is required').notEmpty().isLength([{ max: 500 }])
 
@@ -133,8 +234,9 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
 })
 
 
-
-// project page data
+// =============================== //
+//          project page           //
+// =============================== //
 router.get('/:project', function(req, res) {
     // query for user
 	Project.findOne({ name: req.params.project })
@@ -162,5 +264,6 @@ router.get('/:project', function(req, res) {
         })
     })
 })
+
 
 module.exports = router

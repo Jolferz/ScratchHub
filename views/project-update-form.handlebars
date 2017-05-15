@@ -1,0 +1,38 @@
+{{#if errors}}
+      {{#each errors}}
+        <div class="alert alert-danger">{{msg}}</div>
+      {{/each}}
+{{/if}}
+<div class="form-style-5">
+    <form method="post" action="">
+        <fieldset>
+            <legend><span class="number">1</span> Project Info</legend> 
+            <input type="text" class="form-control" name="name" placeholder="Name *">
+            <textarea type="text" class="form-control" name="description" placeholder="Description"></textarea> 
+            <label for="job">Category:</label> <select id="job" name="category">
+                <option value="Animation">
+                    Animation
+                </option>
+                <option value="Art">
+                    Art
+                </option>
+                <option value="Games">
+                    Game
+                </option>
+                <option value="Music">
+                    Music
+                </option>
+                <option value="Stories">
+                    Story
+                </option>
+                <option value="Tutorial">
+                    Tutorial
+                </option>
+                <option value="Other">
+                    Other
+                </option>
+            </select>
+        </fieldset>
+        <input type="submit" value="Make Changes">
+    </form>
+</div>
