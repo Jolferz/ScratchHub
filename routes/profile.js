@@ -15,6 +15,26 @@ router.get('/:user/update-profile', function(req, res) {
 
 
 // =============================== //
+//         profile DELETE          //
+// =============================== //
+router.delete('/:user/profile-delete', function(req, res) {
+
+    let user = req.session.passport._id
+
+	console.log('we are in the router!!!!')
+    User.findOneAndRemove(user, function(err, user) {
+        if (err) return err
+        // delete user
+    })
+
+    // alerts the user the removal was successful
+    req.flash('success_msg', 'Profile removed succesfully') 
+
+	res.end()
+})
+
+
+// =============================== //
 // 	  profile POST UPDATES    	   //
 // =============================== //
 router.post('/:user/update-profile', function(req, res){
@@ -97,9 +117,9 @@ router.get('/:user', function(req, res){
 		// adds edit button in profile if the user is the owner of the page
         // NOTE: triple equals won't apply to this case as the session passport
         // is a string and the _id is an object.
-        let editBtn = false
+        let modBtns = false
         if (req.session.passport.user == user._id) {
-            editBtn = !editBtn
+            modBtns = !modBtns
         }
 
 		// templating engine variables' values
@@ -110,7 +130,7 @@ router.get('/:user', function(req, res){
 			aboutMe: user.aboutMe,
 			interests: user.interests,
 			projects: user.projects,
-			editBtn: editBtn
+			modBtns: modBtns
 		})
 	})
 })

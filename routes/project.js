@@ -32,6 +32,7 @@ router.get('/:project/update-project', function(req, res) {
     res.render('project-update-form')
 })
 
+
 // =============================== //
 //       project POST UPDATES      //
 // =============================== //
@@ -60,7 +61,8 @@ router.post('/:project/update-project', function(req, res) {
                         options: [{
                             min: 3,
                             max: 500
-                        }]
+                        }],
+                        errorMesagge: '\'Description\' must contain at least 20 characters'
                     }
                 }
             })            
@@ -89,9 +91,10 @@ router.post('/:project/update-project', function(req, res) {
                     },
                     isLength: {
                         options: [{
-                            min: 3,
+                            min: 20,
                             max: 500
-                        }]
+                        }],
+                        errorMesagge: '\'Description\' must contain at least 20 characters' 
                     }
                 }
             })
@@ -131,19 +134,20 @@ router.delete('/:user/project-delete', function(req, res) {
 
     let user = req.session.passport._id
 
-    Project.findOneAndRemove({ name: req.params.user }, function(err, user) {
+    Project.findOneAndRemove({ name: req.params.user }, function(err, project) {
         if (err) return err
 
         // remove document and project's image <<<<<<<<<<<<<<<<<<<<<<<<<<
-        console.log(' ')
-        console.log('user removed: ' + user)
+        fs.unlink('uploads/' + project.name + '.png', function(cb) {
+            // image deleted from database 
+            res.end()
+        })
         
     })
 
     // alerts the user the removal was successful
     req.flash('success_msg', 'Project removed succesfully') 
 
-    res.send(JSON.stringify(user))
 })
 
 
@@ -249,9 +253,9 @@ router.get('/:project', function(req, res) {
         // adds delete button in profile if the user is the author of the project
         // NOTE: triple equals won't apply to this case as the session is a string 
         // and the _id is an object.
-        let dltBtn = false
+        let modBtns = false
         if (req.session.passport.user == project.author._id) {
-            dltBtn = !dltBtn
+            modBtns = !modBtns
         }
 
         // templating engine variables' values
@@ -262,7 +266,7 @@ router.get('/:project', function(req, res) {
             category: project.category,
             author: project.author.name,
             authorLink: project.author.username,
-            dltBtn: dltBtn
+            modBtns: modBtns
         })
     })
 })
