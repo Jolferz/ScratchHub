@@ -22,6 +22,7 @@ router.delete('/:user/profile-delete', function(req, res) {
 
     const user = req.session.passport._id
 
+
 	// find and delete user
     User.findOneAndRemove(user, function(err, user) {
         if (err) return err
