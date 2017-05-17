@@ -1,13 +1,16 @@
 'use strict'
 
-let mongoose = require('mongoose'),
-    moment = require('moment'),
-    User = require('./user'),
-    Project = require('./project')
+const mongoose = require('mongoose'),
+      moment = require('moment'),
+      User = require('./user'),
+      Project = require('./project')
 
-let Schema = mongoose.Schema
+const Schema = mongoose.Schema
 
-// define comment Schema
+
+// =============================== //
+//         comment Schema          //
+// =============================== //
 let CommentSchema = Schema({
     commenter: {
         type: Schema.Types.ObjectId,
