@@ -1,36 +1,48 @@
 'use strict'
 
-let express = require('express'),
-	passport = require('passport'),
-	LocalStrategy = require('passport-local').Strategy,
-	User = require('../models/user')
+const express = require('express'),
+	  passport = require('passport'),
+	  session = require('express-session'),
+	  LocalStrategy = require('passport-local').Strategy,
+	  User = require('../models/user')
 
-let	router = express.Router()
+const router = express.Router()
 
-// index
+// =============================== //
+//            index GET            //
+// =============================== //
 router.get('/', function(req, res){
 	res.render('index')
 })
 
-// register
+
+// =============================== //
+//        register GET form        //
+// =============================== //
 router.get('/register', function(req, res){
 	res.render('register')
 })
 
-// login
+
+// =============================== //
+//          login GET form         //
+// =============================== //
 router.get('/login', function(req, res){
 	res.render('login')
 })
 
-// register user
+
+// =============================== //
+//          register POST          //
+// =============================== //
 router.post('/register', function(req, res){
 
 	// form fields' data
-	let name = req.body.name,
-		email = req.body.email,
-		username = req.body.username,
-	 	password = req.body.password,
-	 	password2 = req.body.password2
+	const name = req.body.name,
+		  email = req.body.email,
+		  username = req.body.username,
+	 	  password = req.body.password,
+	 	  password2 = req.body.password2
 
 	// validation
 	req.checkBody('name', 'Name is required').notEmpty()
@@ -41,7 +53,7 @@ router.post('/register', function(req, res){
 	req.checkBody('password2', 'Passwords do not match').equals(req.body.password)
 
 	// form validation errors
-	let errors = req.validationErrors()
+	const errors = req.validationErrors()
 
 	// if no error found, create new User document in the db
 	if (errors) {
@@ -107,21 +119,13 @@ passport.deserializeUser(function(id, done) {
 })
 
 
+// =============================== //
+//            login POST           //
+// =============================== //
 router.post('/login',
 	passport.authenticate('local', {successRedirect:'/', failureRedirect:'/index/login',failureFlash: true}),
 	function(req, res) { res.redirect('/') })
 
 
-// user logout request
-router.get('/logout', function(req, res) {
-
-	req.logout()
-
-	// alerts the user the submission was successful
-	req.flash('success_msg', 'You are logged out')
-
-	// redirects the user to the projects page
-	res.redirect('/index/login')
-})
 
 module.exports = router

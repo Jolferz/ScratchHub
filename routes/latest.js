@@ -1,12 +1,15 @@
 'use strict'
 
-let express = require('express'),
-	Project = require('../models/project'),
-	exphbs = require('express-handlebars')
+const express = require('express'),
+	  Project = require('../models/project'),
+	  exphbs = require('express-handlebars')
 
-let	router = express.Router()
+const router = express.Router()
 
-// main feed
+
+// =============================== //
+//              feed               //
+// =============================== //
 router.get('/', function(req, res){
 
 	Project.find({ /* all */ })

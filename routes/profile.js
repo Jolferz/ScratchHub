@@ -1,10 +1,11 @@
-	'use strict'
+'use strict'
 
-let express = require('express'),
-    User = require('../models/user'),
-	Project = require('../models/project')
+const express = require('express'),
+	  fs = require('fs'),
+      User = require('../models/user'),
+	  Project = require('../models/project')
 
-let	router = express.Router()
+const	router = express.Router()
 
 // =============================== //
 // 		  profile update form      //
@@ -19,16 +20,34 @@ router.get('/:user/update-profile', function(req, res) {
 // =============================== //
 router.delete('/:user/profile-delete', function(req, res) {
 
-    let user = req.session.passport._id
+    const user = req.session.passport._id
 
-	console.log('we are in the router!!!!')
+	// find and delete user
     User.findOneAndRemove(user, function(err, user) {
         if (err) return err
-        // delete user
+
+		// find every project of current user
+		Project.find({ author: user }, function(err, projects) {
+
+			// remove every single project
+			for (let i = 0; i < projects.length; i++) {				
+
+				// remove project
+				Project.remove({_id: projects[i]}, function(err, rmProjects){
+					
+					// delete project's image
+					fs.unlink('uploads/' + projects[i].name + '.png', function(cb) {
+						
+						// image deleted from database 
+						res.end()
+					})
+				})
+			}
+		})
     })
 
     // alerts the user the removal was successful
-    req.flash('success_msg', 'Profile removed succesfully') 
+    req.flash('success_msg', 'Account deleted succesfully') 
 
 	res.end()
 })

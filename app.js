@@ -1,49 +1,49 @@
 #!/usr/bin/env node
 'use strict'
 
-let express = require('express'),
-    path = require('path'),
-    cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser'),
-    exphbs = require('express-handlebars'),
-    expressValidator = require('express-validator'),
-    flash = require('connect-flash'),
-    session = require('express-session'),
-    passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy,
-    mongo = require('mongodb'),
-    mongoose = require('mongoose'),
-    moment = require('moment')
+const express = require('express'),
+      path = require('path'),
+      cookieParser = require('cookie-parser'),
+      bodyParser = require('body-parser'),
+      exphbs = require('express-handlebars'),
+      expressValidator = require('express-validator'),
+      flash = require('connect-flash'),
+      session = require('express-session'),
+      passport = require('passport'),
+      LocalStrategy = require('passport-local').Strategy,
+      mongo = require('mongodb'),
+      mongoose = require('mongoose'),
+      moment = require('moment')
 
 
 // database connection
 mongoose.connect('mongodb://localhost/ScratchHub')
 
 // database
-let db = mongoose.connection
+const db = mongoose.connection
 
 // route handlers
-let index = require('./routes/index'),
-    users = require('./routes/users'),
-    latest = require('./routes/latest'),
-    project = require('./routes/project'),
-    profile = require('./routes/profile'),
-    logout = require('./routes/logout'),
-    uploads = require('./routes/uploads')
+const index = require('./routes/index'),
+      users = require('./routes/users'),
+      latest = require('./routes/latest'),
+      project = require('./routes/project'),
+      profile = require('./routes/profile'),
+      logout = require('./routes/logout'),
+      uploads = require('./routes/uploads')
 
 // app init
-let app = express()
+const app = express()
 
 // resolves db deprecation warning 'Mongoose: mpromise'
 mongoose.Promise = require('bluebird')
 
 // view engine
 app.set('views', path.join(__dirname, 'views'))
-app.engine('handlebars', exphbs({defaultLayout:'layout'}))
-app.set('view engine', 'handlebars')
+app.engine('hbs', exphbs({defaultLayout:'layout.hbs'}))
+app.set('view engine', 'hbs')
 
 // handlebars module 
-let hbs = require('handlebars')
+const hbs = require('handlebars')
 
 // handlebars custom helpers
 hbs.registerHelper( 'concat', function(filename) {

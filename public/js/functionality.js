@@ -1,10 +1,14 @@
 window.onload = function() {
 
-    // let projectDltBtn = document.getElementById('project-delete-btn')
-    let profileDltBtn = document.getElementById('profile-delete-btn')
 
-    // project delete
-    projectDltBtn.onclick = function() {
+    const projectDltBtn = document.getElementById('project-delete-btn'),
+        profileDltBtn = document.getElementById('profile-delete-btn')
+
+
+    // =============================== //
+    //  project DELETE event listener  //
+    // =============================== //
+    $('#project-delete-btn').on('click', function() {
         console.log(window.location.pathname)
         swal({
             title: "Delete this project?",
@@ -27,14 +31,17 @@ window.onload = function() {
                 })
             }
         })
-    }
+    })
 
-    // profile delete
-    profileDltBtn.onclick = function() {
+    
+    // =============================== //
+    //  profile DELETE event listener  //
+    // =============================== //
+    $('#profile-delete-btn').on('click', function() {
         console.log(window.location.pathname)
         swal({
-            title: "Delete this project?",
-            text: "",
+            title: "Are you sure you want to delete this account?",
+            text: "Doing so will remove all projects from the website.",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#dd6b55",
@@ -46,12 +53,12 @@ window.onload = function() {
                         method: 'DELETE',
                         contentType: 'application/json',
                         success: function(res) {
-                            window.location.replace('/latest')
+                            window.location.replace('/')
                             // give control to the route
                         }
                     }))
                 })
             }
         })
-    }
+    })
 }

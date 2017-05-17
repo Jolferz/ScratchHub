@@ -1,19 +1,17 @@
 'use strict'
 
-let express = require('express'),
-    User = require('../models/user'),
-    Project = require('../models/project'),
-    path = require('path'),
-    formidable = require('formidable'),
-    fs = require('fs'),
-    multer = require('multer'),
-    moment = require('moment')
+const express = require('express'),
+      User = require('../models/user'),
+      Project = require('../models/project'),
+      fs = require('fs'),
+      multer = require('multer'),
+      moment = require('moment')
 
 // router
-let	router = express.Router()
+const router = express.Router()
 
 // image storage and filename renamed same as project
-let storage = multer.diskStorage({
+const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/')
     },
@@ -22,7 +20,7 @@ let storage = multer.diskStorage({
     }
 })
 
-let upload = multer({ storage: storage })
+const upload = multer({ storage: storage })
 
 
 // =============================== //
@@ -45,7 +43,6 @@ router.post('/:project/update-project', function(req, res) {
 
         // form validation
         if (req.body.name === 'default') {
-            console.log('ENTERED default conditional')
             req.checkBody({
                 'name': {
                     isEmpty: false,
@@ -67,7 +64,6 @@ router.post('/:project/update-project', function(req, res) {
                 }
             })            
         } else {
-            console.log('FAILED default conditional')
             req.checkBody({
                 'name': {
                     optional: {
@@ -101,7 +97,7 @@ router.post('/:project/update-project', function(req, res) {
         }
         
         // form validation errors
-    	let errors = req.validationErrors()
+    	const errors = req.validationErrors()
 
         if (errors) {
 			res.render('project-update-form', {
@@ -130,24 +126,21 @@ router.post('/:project/update-project', function(req, res) {
 // =============================== //
 //         project DELETE          //
 // =============================== //
-router.delete('/:user/project-delete', function(req, res) {
+router.delete('/:project/project-delete', function(req, res) {
 
-    let user = req.session.passport._id
-
-    Project.findOneAndRemove({ name: req.params.user }, function(err, project) {
+    // delete project
+    Project.findOneAndRemove({ name: req.params.project }, function(err, project) {
         if (err) return err
 
-        // remove document and project's image <<<<<<<<<<<<<<<<<<<<<<<<<<
+        // delete project's image
         fs.unlink('uploads/' + project.name + '.png', function(cb) {
             // image deleted from database 
             res.end()
         })
-        
     })
 
     // alerts the user the removal was successful
-    req.flash('success_msg', 'Project removed succesfully') 
-
+    req.flash('success_msg', 'Project deleted succesfully') 
 })
 
 
@@ -165,29 +158,27 @@ router.get('/new-project', function(req, res) {
 router.post('/new-project', upload.single('projectImage'), function(req, res) {
 
     // form fields' data
-    let name = req.body.name,
-        description = req.body.description,
-        category = req.body.category,
-        iframe = req.body.iframe
+    const name = req.body.name,
+          description = req.body.description,
+          category = req.body.category,
+          iframe = req.body.iframe
     
-    // form inputs validation
+    // form validation
     if (name === 'default') {
         // if name is 'default', return an error and ask the user to choose a different one
         req.checkBody('name', 'The name \'default\' is not valid. Please, choose a different name for your project.').isEmpty()
     } else {
         req.checkBody('name', 'Name length must contain between 2 and 15 characters').notEmpty().isLength([{ min: 2, max: 30 }])
+        req.checkBody('description', 'Invalid description').isLength([{ max: 500 }])
+        req.checkBody('iframe', 'iframe is required').notEmpty().isLength([{ max: 500 }])
     }
 
-    req.checkBody('description', 'Invalid description').isLength([{ max: 500 }])
-    req.checkBody('iframe', 'iframe is required').notEmpty().isLength([{ max: 500 }])
-
-
     // form validation errors
-    let errors = req.validationErrors()
+    const errors = req.validationErrors()
 
-    // validation error triggered. 
     if (errors) {
-        // checks if image name is equal to 'default.png' (avoids deleting default image when user fails to provide one.
+        // deletes provided image unless the user named its projest 'default' in which case
+        // it avoids deleting the default image in disk
         if (('uploads/' + name + '.png') !== 'uploads/default.png') { 
             fs.unlink('uploads/' + name + '.png', function(cb){
                // image deleted from database 
@@ -198,15 +189,15 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
         })
     } else {
         // creates new project
-        let newProject = new Project({
-            name: name,
-            description: description,
-            iframe: iframe,
-            category: category,
-            author: req.session.passport.user,
-            image: name + '.png',
-            date: Date.now(),
-            cardDate: moment().format('MMMM Do YYYY')
+        const newProject = new Project({
+              name: name,
+              description: description,
+              iframe: iframe,
+              category: category,
+              author: req.session.passport.user,
+              image: name + '.png',
+              date: Date.now(),
+              cardDate: moment().format('MMMM Do YYYY')
         })
 
         // if the user chose not to upload an image, the image name for the project 
@@ -223,6 +214,7 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
         console.log(newProject)
 
         // adds the project to the list of projects of the corresponding user and saves the document
+        // ** NOTE: find out a way so MongoDB updates the user's project entry automatically ** //
         User.findOne({ _id: req.session.passport.user },
         function(err, user) {
             user.projects.push(newProject)
@@ -244,6 +236,7 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
 //          project page           //
 // =============================== //
 router.get('/:project', function(req, res) {
+    
     // query for user
 	Project.findOne({ name: req.params.project })
     .populate('author')

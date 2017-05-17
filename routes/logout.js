@@ -1,13 +1,17 @@
 'use strict'
 
-let express = require('express')
+const express = require('express')
 
-let	router = express.Router()
+const router = express.Router()
 
-// logout GET request, sends user to index after logging out of the session
+// =============================== //
+//           logout GET            //
+// =============================== //
 router.get('/', function(req, res){
-    req.session.destroy();
-	res.render('index')
+
+    req.logout()
+
+	res.redirect('/')
 })
 
 module.exports = router

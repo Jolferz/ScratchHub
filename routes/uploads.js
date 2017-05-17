@@ -1,12 +1,15 @@
 'use strict'
 
-let express = require('express'),
-	Project = require('../models/project'),
-	exphbs = require('express-handlebars')
+const express = require('express'),
+	  Project = require('../models/project'),
+	  exphbs = require('express-handlebars')
 
-let	router = express.Router()
+const router = express.Router()
 
-// testing project image
+
+// =============================== //
+//          project image          //
+// =============================== //
 router.get('/:img', function(req, res) {
 	res.sendFile('/uploads/' + req.params.img, { root: './'})
 })
