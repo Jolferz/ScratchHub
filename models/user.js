@@ -1,7 +1,8 @@
 
 let mongoose = require('mongoose'),
     bcrypt = require('bcryptjs'),
-	Project = require('./project')
+	Project = require('./project'),
+	comments = require('./comment')
 
 
 let Schema = mongoose.Schema
@@ -40,6 +41,10 @@ let UserSchema = Schema({
 	projects: [{ 
 		type: Schema.Types.ObjectId,
 		ref: 'Project'
+	 }],
+	 comments: [{
+		 type: Schema.Types.ObjectId,
+		 ref: 'comments'
 	 }]
 }, {
     toObject: {virtuals : true},

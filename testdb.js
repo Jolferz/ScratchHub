@@ -7,7 +7,7 @@
 let mongoose = require('mongoose'),
     User = require('./models/user'),
     Project = require('./models/project'),
-    _Comment = require('./models/comment'),
+    comments = require('./models/comment'),
     express = require('express')
 
 // resolves deprecation warning 'Mongoose: mpromise'
@@ -93,7 +93,7 @@ Project.findOne({name: 'Scratch & Dodge'}).populate('owner').exec(function(err, 
 
 // need to revise this code <-------------------------------------
 // comment1
-let comment1 = new _Comment({
+let comment1 = new comments({
     commenter: user1._id,
     comment: 'that is such a cool project!',
     project: project1._id

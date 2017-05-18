@@ -3,9 +3,11 @@
 const express = require('express'),
       User = require('../models/user'),
       Project = require('../models/project'),
+      comments = require('../models/comment'),
       fs = require('fs'),
       multer = require('multer'),
-      moment = require('moment')
+      moment = require('moment'),
+      passport = require('passport')
 
 // router
 const router = express.Router()
@@ -235,13 +237,59 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
 // =============================== //
 //          project page           //
 // =============================== //
+router.post('/:project/comment', function(req, res) {
+
+    let commenter = req.session.passport.user,
+        comment = req.body.comment,
+        project = req.params.project
+
+    console.log(commenter) // 591cf4ae4d1f3e19240720bc
+    console.log(comment) // This is a test
+    console.log(req.params.project) // Joker
+    
+    // validation
+    req.checkBody('comment', 'Please enter a comment to post.').isEmpty().isLength([{ max: 200 }])
+
+    const errors = req.validationErrors()
+
+    // error check
+    if (errors) {
+        res.render('project', {
+            errors: errors
+        })
+    } else {
+        // find user and push the comment to the array of comments
+        User.findOne({ _id: commenter }, function(err, user) {
+            user.comments.push(comment)
+            user.save(function(err){
+                if (err) return err
+            })
+        })
+
+        // alerts the user the submission was successful
+        req.flash('success_msg', 'Your project page is live!')
+
+        // redirects the user to the projects page
+        res.redirect('/project/' + project)
+    }
+})
+
+
+// =============================== //
+//          project page           //
+// =============================== //
 router.get('/:project', function(req, res) {
     
     // query for user
 	Project.findOne({ name: req.params.project })
     .populate('author')
+    .populate('project')
+    .populate('comments')
     .exec(function(err, project) {
         if (err) throw err
+        // console.log('-------------------------------------------------------')
+        // console.log(results)
+        // console.log('-------------------------------------------------------')
 
         // adds delete button in profile if the user is the author of the project
         // NOTE: triple equals won't apply to this case as the session is a string 
@@ -259,6 +307,8 @@ router.get('/:project', function(req, res) {
             category: project.category,
             author: project.author.name,
             authorLink: project.author.username,
+            commenter: project.comments.commenter,
+            comment: project.comments.comment,
             modBtns: modBtns
         })
     })

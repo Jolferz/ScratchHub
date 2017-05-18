@@ -38,15 +38,39 @@
 <!-- Comments area -->
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-centered">
-            <div class="widget-area no-padding blank">
-                <div class="status-upload">
-                    <form>
-                        <textarea placeholder="Say something nice..." ></textarea>                
-                        <button type="submit" class="btn btn-success green"><i class="fa fa-share"></i>Post</button>
-                    </form>
-                </div><!-- Status Upload  -->
-            </div><!-- Widget Area -->
+        <div class="col-md-10 col-centered">
+            {{#each projects}}
+                <div class="widget-area no-padding blank">
+                    <div class="comment-user" ><i class="fa fa-user"></i> That Guy</div>
+                    <div class="status-upload">
+                        <fieldset>
+                            <form method="post" action="/project/{{ name }}">
+                                <textarea type="text" class="form-control" name="comment" placeholder="Say something nice..." ></textarea>                
+                                <button type="submit" class="btn btn-success blue">Post</button>
+                            </form>
+                        </fieldset>
+                    </div>
+                </div>
+            {{/each}}
         </div>
     </div>
 </div>
+
+<!-- Comments form -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-centered">
+                <div class="widget-area no-padding blank">
+                    <div class="status-upload">
+                        <fieldset>
+                            <form method="post" action="/project/{{ name }}/comment">
+                                <textarea type="text" class="form-control" name="comment" placeholder="Say something nice..." ></textarea>                
+                                <button type="submit" class="btn btn-success blue">Post</button>
+                            </form>
+                        </fieldset>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+

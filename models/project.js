@@ -1,9 +1,10 @@
 'use strict'
 
-let mongoose = require('mongoose'),
-    User = require('./user')
+const mongoose = require('mongoose'),
+      User = require('./user'),
+      comments = require('./comment')
 
-let Schema = mongoose.Schema
+const Schema = mongoose.Schema
 
 // define project Schema
 let ProjectSchema = Schema({
@@ -16,6 +17,11 @@ let ProjectSchema = Schema({
         ref: 'User',
         max: 1
     },
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'comments',
+        max: 200
+    }],
     image: {
         type: String,
         max: 1
