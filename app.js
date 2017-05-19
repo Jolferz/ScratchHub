@@ -53,6 +53,10 @@ hbs.registerHelper( 'concat', function(filename) {
     return filename     
 })
 
+hbs.registerHelper( 'commentDltBtn', function(commenter) {
+  if (commenter == req.session.passport.user) return true
+})
+
 // bodyParser middleware
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))

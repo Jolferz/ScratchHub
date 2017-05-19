@@ -111,9 +111,7 @@ router.post('/:project/update-project', function(req, res) {
             if (req.body.description) project.description = req.body.description
             if (req.body.category) project.category = req.body.category
 
-            project.save(function(err, updatedProject) {
-                if (err) return err
-            })
+            project.save(function(err, updatedProject) {if (err) return err})
 
             // alerts the user the submission was successful
             req.flash('success_msg', 'Project updated succesfully')
@@ -133,6 +131,9 @@ router.delete('/:project/project-delete', function(req, res) {
     // delete project
     Project.findOneAndRemove({ name: req.params.project }, function(err, project) {
         if (err) return err
+
+        // delete all comments within the project
+        comments.find({ project: project._id }).remove().exec( function(err, comment) {})
 
         // delete project's image
         fs.unlink('uploads/' + project.name + '.png', function(cb) {
@@ -192,14 +193,14 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
     } else {
         // creates new project
         const newProject = new Project({
-              name: name,
-              description: description,
-              iframe: iframe,
-              category: category,
-              author: req.session.passport.user,
-              image: name + '.png',
-              date: Date.now(),
-              cardDate: moment().format('MMMM Do YYYY')
+                name: name,
+                description: description,
+                iframe: iframe,
+                category: category,
+                author: req.session.passport.user,
+                image: name + '.png',
+                date: Date.now(),
+                cardDate: moment().format('MMMM Do YYYY')
         })
 
         // if the user chose not to upload an image, the image name for the project 
@@ -209,9 +210,7 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
         }
 
         // saves the project
-        newProject.save(function(err) {
-            if (err) return err
-        })
+        newProject.save(function(err) {if (err) return err})
 
         console.log(newProject)
 
@@ -220,9 +219,7 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
         User.findOne({ _id: req.session.passport.user },
         function(err, user) {
             user.projects.push(newProject)
-            user.save(function(err) {
-                if (err) return err
-            })
+            user.save(function(err) {if (err) return err})
         })
         
         // alerts the user the submission was successful
@@ -242,13 +239,18 @@ router.post('/:project/comment', function(req, res) {
     let commenter = req.session.passport.user,
         comment = req.body.comment,
         project = req.params.project
-
-    console.log(commenter) // 591cf4ae4d1f3e19240720bc
-    console.log(comment) // This is a test
-    console.log(req.params.project) // Joker
     
-    // validation
-    req.checkBody('comment', 'Please enter a comment to post.').isEmpty().isLength([{ max: 200 }])
+    // post validation
+    req.checkBody({
+       'comment': {
+            notEmpty: true,
+            isLength: {
+                options: [{ max: 300 }],
+                errorMessage: 'Message cannot contain more than 200 characters'
+            },
+            errorMessage: 'Message can\'t be empty'
+        }
+    })
 
     const errors = req.validationErrors()
 
@@ -258,16 +260,39 @@ router.post('/:project/comment', function(req, res) {
             errors: errors
         })
     } else {
-        // find user and push the comment to the array of comments
-        User.findOne({ _id: commenter }, function(err, user) {
-            user.comments.push(comment)
-            user.save(function(err){
-                if (err) return err
+
+        // push comment to the project model
+        Project.findOne({ name: project }, function(err, project) {
+            if (err) return err
+
+            // create new comment
+            const newComment = new comments({
+                    commenter: commenter,
+                    comment: comment,
+                    project: project._id,
+                    date: Date.now(),
+                    postDate: moment().format('MMMM Do YYYY')
+            })
+
+            // save comment
+            newComment.save(function(err) {if (err) return err})
+
+            console.log(newComment)
+            
+            // push the comment to the array of comments in the project
+            project.comments.push(newComment._id)
+
+            // saves project
+            project.save(function(err) {if (err) return err})
+
+            User.findOne({ _id: commenter }, function(err, user) {
+                user.comments.push(newComment._id)
+                user.save(function(err){if (err) return err})
             })
         })
 
         // alerts the user the submission was successful
-        req.flash('success_msg', 'Your project page is live!')
+        req.flash('success_msg', 'Comment posted!')
 
         // redirects the user to the projects page
         res.redirect('/project/' + project)
@@ -283,33 +308,37 @@ router.get('/:project', function(req, res) {
     // query for user
 	Project.findOne({ name: req.params.project })
     .populate('author')
-    .populate('project')
+    .populate('projects')
     .populate('comments')
     .exec(function(err, project) {
         if (err) throw err
         // console.log('-------------------------------------------------------')
-        // console.log(results)
+        // console.log(project)
         // console.log('-------------------------------------------------------')
 
-        // adds delete button in profile if the user is the author of the project
-        // NOTE: triple equals won't apply to this case as the session is a string 
-        // and the _id is an object.
-        let modBtns = false
-        if (req.session.passport.user == project.author._id) {
-            modBtns = !modBtns
-        }
+        comments.find({ project: project._id })
+        .populate('commenter')
+        .exec(function(err, comment) {
 
-        // templating engine variables' values
-        res.render('project', {
-            name: project.name,
-            description: project.description,
-            iframe: project.iframe,
-            category: project.category,
-            author: project.author.name,
-            authorLink: project.author.username,
-            commenter: project.comments.commenter,
-            comment: project.comments.comment,
-            modBtns: modBtns
+            // adds delete button in profile if the user is the author of the project
+            // NOTE: triple equals won't apply to this case as the session is a string 
+            // and the _id is an object.
+            let modBtns = false
+            if (req.session.passport.user == project.author._id) {
+                modBtns = !modBtns
+            }
+
+            // templating engine variables' values
+            res.render('project', {
+                name: project.name,
+                description: project.description,
+                iframe: project.iframe,
+                category: project.category,
+                author: project.author.name,
+                authorLink: project.author.username,
+                comments: comment,
+                modBtns: modBtns
+            })
         })
     })
 })

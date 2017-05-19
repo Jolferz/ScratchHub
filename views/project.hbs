@@ -1,3 +1,8 @@
+{{#if errors}}
+      {{#each errors}}
+        <div class="alert alert-danger">{{msg}}</div>
+      {{/each}}
+{{/if}}
 <div class="col-sm-12 main center-me" >
     <!-- resumt -->
     <div class="panel panel-default">
@@ -39,17 +44,18 @@
 <div class="container">
     <div class="row">
         <div class="col-md-10 col-centered">
-            {{#each projects}}
+            {{#each comments}}
                 <div class="widget-area no-padding blank">
-                    <div class="comment-user" ><i class="fa fa-user"></i> That Guy</div>
-                    <div class="status-upload">
-                        <fieldset>
-                            <form method="post" action="/project/{{ name }}">
-                                <textarea type="text" class="form-control" name="comment" placeholder="Say something nice..." ></textarea>                
-                                <button type="submit" class="btn btn-success blue">Post</button>
-                            </form>
-                        </fieldset>
+                    <div class="comment-user" ><i class="fa fa-user"></i><a href="/profile/{{ this.commenter.username }}">{{ this.commenter.username }}</a></div>
+                    {{#if commentDltBtn }}
+                        <div id="delete-btn">
+                            <button id="project-delete-btn">Delete</button>
+                        </div>
+                    {{/if}}
+                    <div class="msg-box">
+                        <p>{{ this.comment }}</p>
                     </div>
+                    <span class="comment date">{{ this.postDate }}</span>   
                 </div>
             {{/each}}
         </div>
@@ -60,16 +66,16 @@
 <div class="container">
     <div class="row">
         <div class="col-md-10 col-centered">
-                <div class="widget-area no-padding blank">
-                    <div class="status-upload">
-                        <fieldset>
-                            <form method="post" action="/project/{{ name }}/comment">
-                                <textarea type="text" class="form-control" name="comment" placeholder="Say something nice..." ></textarea>                
-                                <button type="submit" class="btn btn-success blue">Post</button>
-                            </form>
-                        </fieldset>
-                    </div>
+            <div class="widget-area no-padding blank">
+                <div class="status-upload">
+                    <fieldset>
+                        <form method="post" action="/project/{{ name }}/comment">
+                            <textarea type="text" class="form-control" name="comment" placeholder="Say something nice..." ></textarea>                
+                            <button type="submit" class="btn btn-success blue">Post</button>
+                        </form>
+                    </fieldset>
                 </div>
+            </div>
         </div>
     </div>
 </div>
