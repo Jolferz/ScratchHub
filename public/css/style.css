@@ -234,7 +234,17 @@ width: 100%;
 }
 
 .comment-user {
+  float:left;
   margin-bottom: 9px;
+}
+
+.glyphicon.glyphicon-remove {
+  color: #dd6b55;
+  float: right;
+  border: none;
+  border-radius: 3px;
+  text-decoration: none;
+  outline: none;
 }
 
 .msg-box {
@@ -243,6 +253,7 @@ width: 100%;
   width: 100%;
   min-height: 100px;
   max-height: 300px;
+  margin-top: 25px;
 }
 
 .comment.date {
@@ -364,6 +375,12 @@ iframe {
 .bs-callout-danger {
   margin: 20px;
   text-decoration: none;
+}
+
+.project-description p,
+.project-list-description,
+.msg-box p {
+  word-break: break-all;
 }
 
 ul li a {

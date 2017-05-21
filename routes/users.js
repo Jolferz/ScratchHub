@@ -17,14 +17,6 @@ router.get('/', function(req, res){
 
 
 // =============================== //
-//        register GET form        //
-// =============================== //
-router.get('/register', function(req, res){
-	res.render('register')
-})
-
-
-// =============================== //
 //          login GET form         //
 // =============================== //
 router.get('/login', function(req, res){
@@ -33,14 +25,32 @@ router.get('/login', function(req, res){
 
 
 // =============================== //
+//            login POST           //
+// =============================== //
+router.post('/login',
+	passport.authenticate('local', {successRedirect:'/', failureRedirect:'/index/login',failureFlash: true}),
+	function(req, res) { 
+		res.redirect('/') 
+})
+
+
+// =============================== //
+//        register GET form        //
+// =============================== //
+router.get('/register', function(req, res){
+	res.render('register')
+})
+
+
+// =============================== //
 //          register POST          //
 // =============================== //
-router.post('/register', function(req, res){
+router.post('/register', function(req, res) {
 
 	// form fields' data
 	const name = req.body.name,
 		  email = req.body.email,
-		  username = req.body.username,
+		  username = req.body.username.toLowerCase(),
 	 	  password = req.body.password,
 	 	  password2 = req.body.password2
 
@@ -61,6 +71,7 @@ router.post('/register', function(req, res){
 			errors: errors
 		})
 	} else {
+		// creates new user
 		let newUser = new User({
 			name: name,
 			email:email,
@@ -68,15 +79,24 @@ router.post('/register', function(req, res){
 			password: password
 		})
 
-		User.createUser(newUser, function(err, user) {
-			if (err) throw err
+		User.createUser(newUser, function(err) {
+			if ( err && err.code !== 11000 ) {
+				// errors
+				console.log(err)
+				console.log(err.code)
+				res.send('Another error showed up')
+			} else if ( err && err.code === 11000 ) {
+				// throws duplicate key error 11000
+				req.flash('error', 'Username is already taken')
+				res.redirect('/index/register')
+			} else {
+				// alerts the user the submission was successful
+				req.flash('success_msg', 'You are registered and can now login')
+
+				// redirects the user to the login screen
+				res.redirect('/index/login')
+			}
 		})
-
-		// alerts the user the submission was successful
-		req.flash('success_msg', 'You are registered and can now login')
-
-		// redirects the user to the projects page
-		res.redirect('/index/login')
 	}
 })
 
@@ -117,15 +137,6 @@ passport.deserializeUser(function(id, done) {
 		done(err, user)
 	})
 })
-
-
-// =============================== //
-//            login POST           //
-// =============================== //
-router.post('/login',
-	passport.authenticate('local', {successRedirect:'/', failureRedirect:'/index/login',failureFlash: true}),
-	function(req, res) { res.redirect('/') })
-
 
 
 module.exports = router

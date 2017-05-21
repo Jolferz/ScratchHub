@@ -58,7 +58,7 @@ router.post('/:project/update-project', function(req, res) {
                     },
                     isLength: {
                         options: [{
-                            min: 3,
+                            min: 20,
                             max: 500
                         }],
                         errorMesagge: '\'Description\' must contain at least 20 characters'
@@ -78,7 +78,7 @@ router.post('/:project/update-project', function(req, res) {
                             min: 3,
                             max: 30
                         }],
-                        errorMessage: '\'Name\' can have between 3 and 30 characters long.'
+                        errorMessage: '\'Name\' must contain between 3 and 30 characters.'
 				    }
                 },
                 'description': {
@@ -92,7 +92,7 @@ router.post('/:project/update-project', function(req, res) {
                             min: 20,
                             max: 500
                         }],
-                        errorMesagge: '\'Description\' must contain at least 20 characters' 
+                        errorMessage: '\'Description\' must contain between 20 and 500 characters' 
                     }
                 }
             })
@@ -171,9 +171,30 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
         // if name is 'default', return an error and ask the user to choose a different one
         req.checkBody('name', 'The name \'default\' is not valid. Please, choose a different name for your project.').isEmpty()
     } else {
-        req.checkBody('name', 'Name length must contain between 2 and 15 characters').notEmpty().isLength([{ min: 2, max: 30 }])
-        req.checkBody('description', 'Invalid description').isLength([{ max: 500 }])
-        req.checkBody('iframe', 'iframe is required').notEmpty().isLength([{ max: 500 }])
+        req.checkBody({
+            'name': {
+                isLength: {
+                    options: [{
+                        min: 3,
+                        max: 30
+                    }],
+                    errorMessage: '\'Name\' must contain between 3 and 30 characters.'
+                }
+            },
+            'description': {
+                isLength: {
+                    options: [{
+                        min: 20,
+                        max: 500
+                    }],
+                    errorMessage: '\'Description\' must contain between 20 and 500 characters' 
+                }
+            },
+            'iframe': {
+                notEmpty: true,
+                errorMessage: 'Please, provide the iframe of your project'
+            }
+        })
     }
 
     // form validation errors
@@ -191,7 +212,7 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
             errors: errors
         })
     } else {
-        // creates new project
+        // create new project
         const newProject = new Project({
                 name: name,
                 description: description,
@@ -210,92 +231,34 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
         }
 
         // saves the project
-        newProject.save(function(err) {if (err) return err})
+        newProject.save(function(err) {
+            if ( err && err.code !== 11000 ) {
+				// errors
+				console.log(err)
+				console.log(err.code)
+				res.send('Another error showed up')
+			} else if ( err && err.code === 11000 ) {
+				// throws duplicate key error 11000
+				req.flash('error', 'Sorry, but this project name is already taken. Please, try different one.')
+				res.redirect('/project/new-project')
+			} else {
+                console.log(newProject)
 
-        console.log(newProject)
+                // adds the project to the list of projects of the corresponding user and saves the document
+                // ** NOTE: find out a way so MongoDB updates the user's project entry automatically ** //
+                User.findOne({ _id: req.session.passport.user },
+                function(err, user) {
+                    user.projects.push(newProject)
+                    user.save(function(err) {if (err) return err})
+                })
+                
+                // alerts the user the submission was successful
+                req.flash('success_msg', 'Your project page is live!')
 
-        // adds the project to the list of projects of the corresponding user and saves the document
-        // ** NOTE: find out a way so MongoDB updates the user's project entry automatically ** //
-        User.findOne({ _id: req.session.passport.user },
-        function(err, user) {
-            user.projects.push(newProject)
-            user.save(function(err) {if (err) return err})
+                // redirects the user to the projects page
+                res.redirect('/project/' + name)
+            }
         })
-        
-        // alerts the user the submission was successful
-        req.flash('success_msg', 'Your project page is live!')
-
-        // redirects the user to the projects page
-        res.redirect('/project/' + name)
-    }
-})
-
-
-// =============================== //
-//          project page           //
-// =============================== //
-router.post('/:project/comment', function(req, res) {
-
-    let commenter = req.session.passport.user,
-        comment = req.body.comment,
-        project = req.params.project
-    
-    // post validation
-    req.checkBody({
-       'comment': {
-            notEmpty: true,
-            isLength: {
-                options: [{ max: 300 }],
-                errorMessage: 'Message cannot contain more than 200 characters'
-            },
-            errorMessage: 'Message can\'t be empty'
-        }
-    })
-
-    const errors = req.validationErrors()
-
-    // error check
-    if (errors) {
-        res.render('project', {
-            errors: errors
-        })
-    } else {
-
-        // push comment to the project model
-        Project.findOne({ name: project }, function(err, project) {
-            if (err) return err
-
-            // create new comment
-            const newComment = new comments({
-                    commenter: commenter,
-                    comment: comment,
-                    project: project._id,
-                    date: Date.now(),
-                    postDate: moment().format('MMMM Do YYYY')
-            })
-
-            // save comment
-            newComment.save(function(err) {if (err) return err})
-
-            console.log(newComment)
-            
-            // push the comment to the array of comments in the project
-            project.comments.push(newComment._id)
-
-            // saves project
-            project.save(function(err) {if (err) return err})
-
-            User.findOne({ _id: commenter }, function(err, user) {
-                user.comments.push(newComment._id)
-                user.save(function(err){if (err) return err})
-            })
-        })
-
-        // alerts the user the submission was successful
-        req.flash('success_msg', 'Comment posted!')
-
-        // redirects the user to the projects page
-        res.redirect('/project/' + project)
     }
 })
 
@@ -312,9 +275,6 @@ router.get('/:project', function(req, res) {
     .populate('comments')
     .exec(function(err, project) {
         if (err) throw err
-        // console.log('-------------------------------------------------------')
-        // console.log(project)
-        // console.log('-------------------------------------------------------')
 
         comments.find({ project: project._id })
         .populate('commenter')
@@ -328,8 +288,11 @@ router.get('/:project', function(req, res) {
                 modBtns = !modBtns
             }
 
+            let userId = req.session.passport.user 
+
             // templating engine variables' values
             res.render('project', {
+                userId: userId,
                 name: project.name,
                 description: project.description,
                 iframe: project.iframe,

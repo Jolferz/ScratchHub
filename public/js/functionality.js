@@ -40,8 +40,8 @@ window.onload = function() {
     $('#profile-delete-btn').on('click', function() {
         console.log(window.location.pathname)
         swal({
-            title: "Are you sure you want to delete this account?",
-            text: "Doing so will remove all projects from the website.",
+            title: "Delete this account?",
+            text: "Doing so will permanently remove all projects.",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#dd6b55",
@@ -60,5 +60,19 @@ window.onload = function() {
                 })
             }
         })
+    })
+
+    // =============================== //
+    //     login username lowercase    //
+    // =============================== //
+
+    $('#login-submit').on('click', function() {
+        let str
+        str = document.getElementById("username")
+        str.value = (str.value.toLowerCase())
+
+        //get the form id and submit it
+        let form = document.getElementById("login")
+        form.submit()
     })
 }

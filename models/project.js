@@ -8,7 +8,14 @@ const Schema = mongoose.Schema
 
 // define project Schema
 let ProjectSchema = Schema({
-    name: String,
+    name: {
+        type: String,
+        required: true,
+        max: 35,
+        index: {
+            unique: true
+        }
+    },
     description: String,
     iframe: String,
     category: String,

@@ -20,12 +20,15 @@ router.get('/:user/update-profile', function(req, res) {
 // =============================== //
 router.delete('/:user/profile-delete', function(req, res) {
 
-    const user = req.session.passport._id
-
+	const user = req.params.user
 
 	// find and delete user
-    User.findOneAndRemove(user, function(err, user) {
+    User.findOneAndRemove({ username: user })
+	.populate('author')
+	.exec(function(err, user) {
         if (err) return err
+
+		console.log('User found by \'findOneAndRemove\': ', user)
 
 		// find every project of current user
 		Project.find({ author: user }, function(err, projects) {

@@ -28,6 +28,7 @@ const index = require('./routes/index'),
       latest = require('./routes/latest'),
       project = require('./routes/project'),
       profile = require('./routes/profile'),
+	  comment = require('./routes/comment'),
       logout = require('./routes/logout'),
       uploads = require('./routes/uploads')
 
@@ -42,19 +43,34 @@ app.set('views', path.join(__dirname, 'views'))
 app.engine('hbs', exphbs({defaultLayout:'layout.hbs'}))
 app.set('view engine', 'hbs')
 
+// express session (don't include the secret in the final app version or repository) <===============================
+// express session (don't include the secret in the final app version or repository) <===============================
+app.use(session({
+    secret: 'secretish',
+    saveUninitialized: true,
+    resave: true
+}))
+
 // handlebars module 
 const hbs = require('handlebars')
 
 // handlebars custom helpers
-hbs.registerHelper( 'concat', function(filename) {
+// concat helper
+hbs.registerHelper('concat', function(filename) {
     if (filename === 'default') {
       return filename + '.png'
     }    
     return filename     
 })
-
-hbs.registerHelper( 'commentDltBtn', function(commenter) {
-  if (commenter == req.session.passport.user) return true
+// compare helper
+hbs.registerHelper('compare', function(value1, value2, options) {
+	console.log('this: ', this)
+	console.log('options: ', options)
+	if (value1 != value2) {
+		return options.inverse(this)
+	} else {
+		return options.fn(this)
+	}
 })
 
 // bodyParser middleware
@@ -65,15 +81,7 @@ app.use(cookieParser())
 // set static folder
 app.use(express.static(path.join(__dirname, 'public')))
 
-// express session (don't include the secret in the final app version or repository) <===============================
-// express session (don't include the secret in the final app version or repository) <===============================
-app.use(session({
-    secret: 'secretish',
-    saveUninitialized: true,
-    resave: true
-}))
-
-// passport init
+// passport init 
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -113,6 +121,7 @@ app.use('/index', users)
 app.use('/latest', latest)
 app.use('/project', project)
 app.use('/profile', profile)
+app.use('/comment', comment)
 app.use('/logout', logout)
 app.use('/uploads', uploads)
 

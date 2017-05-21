@@ -39,19 +39,18 @@
     </div>
 </div>
 
-
-<!-- Comments area -->
+<!-- Comments -->
 <div class="container">
     <div class="row">
         <div class="col-md-10 col-centered">
             {{#each comments}}
                 <div class="widget-area no-padding blank">
-                    <div class="comment-user" ><i class="fa fa-user"></i><a href="/profile/{{ this.commenter.username }}">{{ this.commenter.username }}</a></div>
-                    {{#if commentDltBtn }}
-                        <div id="delete-btn">
-                            <button id="project-delete-btn">Delete</button>
-                        </div>
-                    {{/if}}
+                    <div class="comment-user" ><i class="fa fa-user"></i><a href="/profile/{{ this.commenter }}">{{ this.commenter.username }}</a></div>
+                    {{#compare this.commenter._id ../userId}}
+                        <div id="delete-comment-btn">
+                            <a href="/comment/{{ ../name }}/{{ this._id }}/delete"><i class="glyphicon glyphicon-remove"></i></a>
+                        </div>                    
+                    {{/compare}}
                     <div class="msg-box">
                         <p>{{ this.comment }}</p>
                     </div>
@@ -69,7 +68,7 @@
             <div class="widget-area no-padding blank">
                 <div class="status-upload">
                     <fieldset>
-                        <form method="post" action="/project/{{ name }}/comment">
+                        <form method="post" action="/comment/{{ name }}">
                             <textarea type="text" class="form-control" name="comment" placeholder="Say something nice..." ></textarea>                
                             <button type="submit" class="btn btn-success blue">Post</button>
                         </form>
