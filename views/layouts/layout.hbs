@@ -26,16 +26,17 @@
           </ul>
           <h3 class="text-muted">
             {{#if user}}
-              <a href="/latest">ScratchHub</a>
+              <a href="/latest"><img src="/imgs/logo/ScratchHub.png" alt="logo"></a>
             {{else}}
-              <p>ScratchHub</p>
+              <a href="/index"><img src="/imgs/logo/ScratchHub.png" alt="logo"></a>
             {{/if}}
           </h3>
         </nav>
       </div>
 
       <div class="row">
-        <div class="col-lg-12">
+        {{!--14 cols to this div to solve the footer top line breaking--}}
+        <div class="col-lg-14">
           {{#if success_msg}}
             <div class="alert alert-success">{{success_msg}}</div>
           {{/if}}

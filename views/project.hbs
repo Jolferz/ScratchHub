@@ -14,9 +14,24 @@
                     </div>
                     <div class="col-md-12  vertical-center ">
                         <ul class="list-group">
-                            <li class="list-group-item"><strong>Name:</strong> {{ name }}</li>
-                            <li class="list-group-item"><strong>Category:</strong> {{ category }}</li>
-                            <li class="list-group-item"><strong>Developed by:</strong><a href="/profile/{{ authorLink }}"> {{ authorLink }}</a></li>
+                            <li class="list-group-item project-list-items">
+                                <div class="project-info-fields">
+                                    <div class="field"><strong>Name:</strong></div>
+                                    <div class="info">{{ name }}</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item project-list-items">
+                                <div class="project-info-fields">
+                                    <div class="field"><strong>Category:</strong></div>
+                                    <div class="info">{{ category }}</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item project-list-items">
+                                <div class="project-info-fields">
+                                    <div class="field"><strong>Developed by:</strong></div>
+                                    <div class="info"><a href="/profile/{{ authorLink }}"> {{ authorLink }}</a></div>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -70,7 +85,7 @@
                     <fieldset>
                         <form method="post" action="/comment/{{ name }}">
                             <textarea type="text" class="form-control" name="comment" placeholder="Say something nice..." ></textarea>                
-                            <button type="submit" class="btn btn-success blue">Post</button>
+                            <button type="submit" class="btn post">Post</button>
                         </form>
                     </fieldset>
                 </div>
