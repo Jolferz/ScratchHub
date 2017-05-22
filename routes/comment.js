@@ -22,12 +22,14 @@ router.post('/:project', function(req, res) {
     // post validation
     req.checkBody({
        'comment': {
-            notEmpty: true,
+            notEmpty: {
+                options: true,
+                errorMessage: 'Can\'t post empty message'
+            },
             isLength: {
                 options: [{ max: 300 }],
                 errorMessage: 'Message cannot contain more than 200 characters'
             },
-            errorMessage: 'Message can\'t be empty'
         }
     })
 
@@ -35,8 +37,43 @@ router.post('/:project', function(req, res) {
 
     // error check
     if (errors) {
-        res.render('project', {
-            errors: errors
+
+        // query for the project
+        Project.findOne({ name: project })
+        .populate('author')
+        .populate('projects')
+        .populate('comments')
+        .exec(function(err, project) {
+            if (err) throw err
+
+            comments.find({ project: project._id })
+            .populate('commenter')
+            .exec(function(err, comment) {
+
+                // adds delete button in profile if the user is the author of the project
+                // NOTE: triple equals won't apply to this case as the session is a string 
+                // and the _id is an object.
+                let modBtns = false
+                if (req.session.passport.user == project.author._id) {
+                    modBtns = !modBtns
+                }
+
+                let userId = req.session.passport.user 
+
+                // templating engine variables' values
+                res.render('project', {
+                    errors: errors,
+                    userId: userId,
+                    name: project.name,
+                    description: project.description,
+                    iframe: project.iframe,
+                    category: project.category,
+                    author: project.author.name,
+                    authorLink: project.author.username,
+                    comments: comment,
+                    modBtns: modBtns
+                })
+            })
         })
     } else {
 

@@ -477,3 +477,12 @@ ul li a {
   background-color: #25aff4;
   transition: 0.1s;
 }
+
+.gutter-50.row {
+  margin-right: -100px;
+  margin-left: -20px;
+}
+.gutter-50 > [class^="col-"], .gutter-50 > [class^=" col-"] {
+  padding-right: 30px;
+  padding-left: 30px;
+}

@@ -268,7 +268,7 @@ router.post('/new-project', upload.single('projectImage'), function(req, res) {
 // =============================== //
 router.get('/:project', function(req, res) {
     
-    // query for user
+    // query for the project
 	Project.findOne({ name: req.params.project })
     .populate('author')
     .populate('projects')
