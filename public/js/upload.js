@@ -36,17 +36,15 @@ $('#upload-input').on('change', function () {
         // listen to the 'progress' event
         xhr.upload.addEventListener('progress', function (evt) {
           if (evt.lengthComputable) {
-			// calculate the percentage of upload completed
+            // calculate the percentage of upload completed
             let percentComplete = evt.loaded / evt.total
             percentComplete = parseInt(percentComplete * 100)
-
-			// update the Bootstrap progress bar with the new percentage
+            // update the Bootstrap progress bar with the new percentage
             $('.progress-bar').text(percentComplete + '%')
             $('.progress-bar').width(percentComplete + '%')
-
-			// once the upload reaches 100%, set the progress bar text to done
+            // once the upload reaches 100%, set the progress bar text to done
             if (percentComplete === 100) {
-			  $('.progress-bar').html('Done')
+              $('.progress-bar').html('Done')
             }
           }
         }, false)

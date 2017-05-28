@@ -1,6 +1,4 @@
 window.onload = function () {
-  const projectDltBtn = document.getElementById('project-delete-btn'),
-    profileDltBtn = document.getElementById('profile-delete-btn')
 
     // =============================== //
     //  project DELETE event listener  //
