@@ -30,5 +30,11 @@
     "passport-http": "*",
     "passport-local": "*",
     "sweetalert2": "^6.6.2"
+  },
+  "devDependencies": {
+    "standard": "^10.0.2"
+  },
+  "engines": {
+    "node": "6.10.3"
   }
 }

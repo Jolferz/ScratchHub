@@ -7,11 +7,10 @@ const router = express.Router()
 // =============================== //
 //           logout GET            //
 // =============================== //
-router.get('/', function(req, res){
+router.get('/', function (req, res) {
+  req.logout()
 
-    req.logout()
-
-	res.redirect('/')
+  res.redirect('/')
 })
 
 module.exports = router
