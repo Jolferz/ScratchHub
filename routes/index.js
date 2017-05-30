@@ -1,10 +1,12 @@
 'use strict'
 
-let express = require('express')
+const express = require('express')
 
-let router = express.Router()
+const router = express.Router()
 
-// homepage GET request
+// =============================== //
+//            index GET            //
+// =============================== //
 router.get('/', ensureAuthenticated, function (req, res) {
   res.redirect('latest')
 })

@@ -445,13 +445,13 @@ ul li a {
   background-color: #e8eeef;
 }
 
-.project-list-items {
+.box-list-items {
   padding: 0px;
   vertical-align: middle;
   line-height: 40px;
 }
 
-.project-info-fields .field {
+.box-info-fields .field {
   background-color:#ffa333;
   /*color: #fff;*/
   display: inline-block;
@@ -460,11 +460,11 @@ ul li a {
   text-align: center;
 }
 
-.project-info-fields .info {
+.box-info-fields .info {
   margin-left: 15px;
 }
 
-.project-info-fields div {
+.box-info-fields div {
   display: inline-block;
 }
 

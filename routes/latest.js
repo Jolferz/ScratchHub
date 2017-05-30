@@ -6,7 +6,7 @@ const Project = require('../models/project')
 const router = express.Router()
 
 // =============================== //
-//              feed               //
+//          latest GET             //
 // =============================== //
 router.get('/', function (req, res) {
   Project.find({ /* all */ })

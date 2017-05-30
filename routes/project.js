@@ -24,14 +24,14 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 // =============================== //
-//     project GET UPDATE form     //
+//     project update GET form     //
 // =============================== //
 router.get('/:project/update-project', (req, res) => {
   res.render('project-update-form')
 })
 
 // =============================== //
-//       project POST UPDATES      //
+//       project update POST       //
 // =============================== //
 router.post('/:project/update-project', (req, res) => {
     // query for the project
@@ -218,7 +218,7 @@ router.post('/new-project', upload.single('projectImage'), (req, res) => {
     })
 
     // if the user chose not to upload an image, the image name for the project
-    // will change to default and the program will assign accordingly
+    // will change to default
     if (!fs.existsSync('uploads/' + name + '.png')) {
       newProject.image = 'default'
     }
@@ -257,7 +257,7 @@ router.post('/new-project', upload.single('projectImage'), (req, res) => {
 })
 
 // =============================== //
-//          project page           //
+//       project render page       //
 // =============================== //
 router.get('/:project', (req, res) => {
   // query for the project

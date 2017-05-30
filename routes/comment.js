@@ -88,14 +88,6 @@ router.post('/:project', function (req, res) {
         postDate: moment().format('MMMM Do YYYY')
       })
 
-      console.log(newComment)
-
-      console.log('project: ')
-      console.log(project + '\n\n')
-
-      console.log('project.Comments: ')
-      console.log(project.Comments + '\n\n')
-
       // save comment
       newComment.save(function (err) { if (err) return err })
 
