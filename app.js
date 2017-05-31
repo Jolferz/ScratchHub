@@ -40,7 +40,6 @@ app.engine('hbs', exphbs({defaultLayout: 'layout.hbs'}))
 app.set('view engine', 'hbs')
 
 // express session (don't include the secret in the final app version or repository) <===============================
-// express session (don't include the secret in the final app version or repository) <===============================
 app.use(session({
   secret: 'secretish',
   saveUninitialized: true,
