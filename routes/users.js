@@ -52,7 +52,16 @@ router.post('/register', function (req, res) {
   req.checkBody('email', 'Email is required').notEmpty()
   req.checkBody('email', 'Email is not valid').isEmail()
   req.checkBody('username', 'Username is required and can only contain alphabetical characters').notEmpty().isAlpha()
-  req.checkBody('password', 'Password is required').notEmpty()
+  req.checkBody({
+    'password': {
+      notEmpty: true,
+      isLength: {
+        options: [{ min: 6, max: 30 }],
+        errorMessage: 'Password\'s length must be between 6 and 30 characters long'
+      },
+      errorMessage: 'Password is required'
+    }
+  })
   req.checkBody('password2', 'Passwords do not match').equals(req.body.password)
   // form validation errors
   const errors = req.validationErrors()
@@ -100,7 +109,7 @@ function (username, password, done) {
     if (err) return err
     // check if session exists
     if (!user) {
-      return done(null, false, {message: 'Unknown User'})
+      return done(null, false, {message: 'Incorrect username or password'})
     }
     User.comparePassword(password, user.password, function (err, isMatch) {
       // check for errors
