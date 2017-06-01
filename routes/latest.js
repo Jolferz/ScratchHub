@@ -13,6 +13,8 @@ router.get('/', function (req, res) {
   .populate('author')
   .exec(function (err, project) {
     if (err) return res.status(500).send()
+    
+    project = project.reverse()
 
     res.render('latest', {
       projects: project
