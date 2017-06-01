@@ -10,7 +10,7 @@ MongoDB download center: https://www.mongodb.com/download-center#community
 2. Windows instructions: http://bit.ly/2h8rx39
 
 
-To run the database, you need to execute "mongod" located where all the MongoDB files where saved at the moment of installation.
+To activate the database, you need to execute "mongod" located where all the MongoDB files where saved at the moment of installation.
 
 
 The following is not necessary, but if you want to access the database then run the command "mongo" in the terminal. Here is a short list of useful commands of the database:
