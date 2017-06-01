@@ -13,7 +13,7 @@ MongoDB download center: https://www.mongodb.com/download-center#community
 To activate the database, you need to execute "mongod" located where all the MongoDB files where saved at the moment of installation.
 
 
-The following is not necessary, but if you want to access the database then run the command "mongo" in the terminal. Here is a short list of useful commands of the database:
+The following is not necessary, but if you want to access the database control panel then run the command "mongo" in the terminal. Here is a short list of useful commands of the database:
 
 1. show dbs: lists all existing databases
 2. use [db name]: enters the specified database
