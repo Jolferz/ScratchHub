@@ -14,6 +14,7 @@ router.get('/', function (req, res) {
   .exec(function (err, project) {
     if (err) return res.status(500).send()
     
+    // order the project in a chronological order (newest to oldest)
     project = project.reverse()
 
     res.render('latest', {
